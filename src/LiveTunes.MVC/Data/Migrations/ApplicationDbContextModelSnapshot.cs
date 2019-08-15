@@ -98,6 +98,8 @@ namespace LiveTunes.MVC.Data.Migrations
 
                     b.Property<string>("EventName");
 
+                    b.Property<int>("EventbriteEventId");
+
                     b.Property<string>("Genre");
 
                     b.Property<double>("Latitude");

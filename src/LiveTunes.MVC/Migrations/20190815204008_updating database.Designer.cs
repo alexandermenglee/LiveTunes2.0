@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LiveTunes.MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190815180111_addMusicCategory")]
-    partial class addMusicCategory
+    [Migration("20190815204008_updating database")]
+    partial class updatingdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -99,6 +99,8 @@ namespace LiveTunes.MVC.Migrations
                     b.Property<string>("Description");
 
                     b.Property<string>("EventName");
+
+                    b.Property<int>("EventbriteEventId");
 
                     b.Property<string>("Genre");
 
