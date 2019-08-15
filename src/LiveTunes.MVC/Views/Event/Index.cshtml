@@ -3,7 +3,7 @@
 }
 
 <script src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
-
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script type="text/javascript">
 
     x = navigator.geolocation;
@@ -11,9 +11,24 @@
     x.getCurrentPosition(success, failure);
 
     function success(position) {
-        var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;
+        /*var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;*/
         console.log(position);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("EventController", "GetEventsByCoordinates")',
+            contentType: "application/json; charset=utf-8",
+            data: { data: position },
+            dataType: "json",
+            success: recData => alert("Success" + recData),
+            error: error => console.log(error)
+        });
+
+        /*$.ajax({
+        type: "GET",
+        url: "https://localhost:44303/event/GetEventsByCoordinates/?lat=" + latitude + "&lon=" + longitude
+        })*/
     }
 
     function failure() {

@@ -37,11 +37,14 @@ namespace LiveTunes.MVC.Controllers
             context.SaveChangesAsync();*/
         }
 
-        static async Task<object> GetEvents()
+        [HttpPost]
+        static async Task<object> GetEventsByCoordinates()
         {
             try
             {
-                var result = await client.GetStringAsync("https://www.eventbriteapi.com/v3/events/search?location.longitude=-87.90404749999999&location.latitude=43.029494&expand=venue&location.within=&token=" + EventbriteAPIToken.Token);
+                var result = await client.GetStringAsync("$https://www.eventbriteapi.com/v3/events/search?location.longitude={longitude}&location.latitude={latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
+
+
 
                 var data = JsonConvert.DeserializeObject<JObject>(result);
                 var eventName = data["events"];
@@ -54,10 +57,19 @@ namespace LiveTunes.MVC.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+       /* public async Task<IActionResult> Index()
         {
-            var results = await GetEvents();
-            var events = await _context.Events.FirstOrDefaultAsync();
+            *//*var results = await GetEvents();*/
+            /*var events = await _context.Events.FirstOrDefaultAsync();*//*
+
+
+            return View();
+        }*/
+
+        public IActionResult Index()
+        {
+            /*var results = await GetEvents();*/
+            /*var events = await _context.Events.FirstOrDefaultAsync();*/
 
 
             return View();
