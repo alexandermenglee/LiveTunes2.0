@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using Newtonsoft.Json.Linq;
+using LiveTunes.MVC.Class;
 
 namespace LiveTunes.MVC.Controllers
 {
@@ -20,7 +21,8 @@ namespace LiveTunes.MVC.Controllers
     {
         private static HttpClient client;
         private readonly ApplicationDbContext _context;
-        public dynamic results;
+        /*public dynamic results;*/
+        private Coordinate coordinates;
 
         /*public IEnumerable<Event> events;*/
         public EventController(ApplicationDbContext context)
@@ -38,13 +40,11 @@ namespace LiveTunes.MVC.Controllers
 		}
 
         [HttpPost]
-        static async Task<object> GetEventsByCoordinates()
+        static async Task<object> GetEventsByCoordinates(Coordinate coordinate)
         {
             try
-            {
-                var result = await client.GetStringAsync("$https://www.eventbriteapi.com/v3/events/search?location.longitude={longitude}&location.latitude={latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
-
-
+            {    
+                var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
 
                 var data = JsonConvert.DeserializeObject<JObject>(result);
                 var eventName = data["events"];
@@ -56,22 +56,14 @@ namespace LiveTunes.MVC.Controllers
             }
         }
 
-
-       /* public async Task<IActionResult> Index()
+        public async void Handoff([FromBody] Coordinate coordinate)
         {
-            *//*var results = await GetEvents();*/
-            /*var events = await _context.Events.FirstOrDefaultAsync();*//*
-
-
-            return View();
-        }*/
+            await GetEventsByCoordinates(coordinate);
+            RedirectToAction("Index");
+        }
 
         public IActionResult Index()
         {
-            /*var results = await GetEvents();*/
-            /*var events = await _context.Events.FirstOrDefaultAsync();*/
-
-
             return View();
         }
 
