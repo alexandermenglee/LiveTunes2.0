@@ -6,17 +6,17 @@ namespace LiveTunes.MVC.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Description",
-                table: "Event",
-                nullable: true);
+            //migrationBuilder.AddColumn<string>(
+            //    name: "Description",
+            //    table: "Event",
+            //    nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Description",
-                table: "Event");
+            //migrationBuilder.DropColumn(
+            //    name: "Description",
+            //    table: "Event");
         }
     }
 }

@@ -23,7 +23,7 @@ namespace LiveTunes.MVC.Models
         public DateTime DateTime { get; set; }
         [Display(Name = "Genre")]
         public string Genre { get; set; }
-        public string Description { get; set; }
+        public string Description{ get; set; }
 
         [NotMapped]
         public int LikeCount { get; set; }
