@@ -96,6 +96,27 @@ namespace LiveTunes.MVC.Controllers
             return View(evnt);
         }
 
+
+        //get by preferences
+        public async Task List(Coordinate location)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault().UserProfileId;
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
+
+            // get User Preferences
+            // and query Event brite based on location
+            // query returned data based on preferences
+            return;
+        }
+
+
+        public async Task List(int GenreId, Coordinate location)
+        {
+            // api call to get List of events by genre and location
+            return;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Like(int id)
         {

@@ -31,19 +31,11 @@
         })*/
     }
 
-   <form id="genreForm" action="/Event">
-<select form="genreForm">
-    @foreach (var x in Model)
-    {
-        <option value=@x.Id>@Html.DisplayFor(modelItem => x.CategoryName)</option>
-    }
-</select>
-       <input type="submit" value="search"/>
-</form>
 
-    <!--<script src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>-->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script type="text/javascript">
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>-->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
 
         x = navigator.geolocation;
 
@@ -74,26 +66,39 @@
             alert("Could not retrieve location.");
         }
 
-    </script>
+</script>
 
-    <div class="card">
-        <div class="card-header">
-            Event Name
-        </div>
-        <div class="card-body container">
-            <div class="row">
-                <div class="col-3">
-                    <img />
-                </div>
-                <div class="col-9">
-                    <h5 class="card-title">Name: </h5>
-                    <h5 class="card-title">Date: </h5>
-                    <h5 class="card-title">Time: </h5>
-                    <h5 class="card-title">Genre: </h5>
-                </div>
+
+<form id="genreForm" action="/Event">
+    <select form="genreForm" id="genres">
+        @*@foreach (var x in Model)
+            {
+                <option value=@x.Id>@Html.DisplayFor(modelItem => x.CategoryName)</option>
+            }*@
+    </select>
+    <input type="submit" value="search" />
+</form>
+<script src="~/js/Genre.js"></script>
+<script>getGenreList();</script>
+
+<div class="card">
+    <div class="card-header">
+        Event Name
+    </div>
+    <div class="card-body container">
+        <div class="row">
+            <div class="col-3">
+                <img />
+            </div>
+            <div class="col-9">
+                <h5 class="card-title">Name: </h5>
+                <h5 class="card-title">Date: </h5>
+                <h5 class="card-title">Time: </h5>
+                <h5 class="card-title">Genre: </h5>
             </div>
         </div>
     </div>
+</div>
 
 
 
