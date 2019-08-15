@@ -2,7 +2,7 @@
 
 namespace LiveTunes.MVC.Migrations
 {
-    public partial class UpdatedBusinessProfileModel : Migration
+    public partial class EventUserEngagementMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

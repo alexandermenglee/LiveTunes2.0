@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LiveTunes.MVC.ViewModels.EventUserEngagement>
+
+@{
+	ViewData["Title"] = "BarGraph";
+}
+
+<h1>User Engagement</h1>
+
+<link rel="stylesheet" href="~/css/styles.css">
+<svg width="960" height="500"></svg>
+
+<script src="http://unpkg.com/d3@5.9.2/dist/d3.min.js"></script>
+<script src="~/js/D3Graphs.js" type="text/javascript"></script>
+<script src="~/js/bundle.js"></script>
+
+
+@*<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.EventName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.EventDate)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.UserEngagement)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+	@foreach (var item in Model) {
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.EventName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EventDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.UserEngagement)
+				</td>
+				<td>
+					@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+					@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+					@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+				</td>
+			</tr>
+	}
+		</tbody>
+	</table>*@

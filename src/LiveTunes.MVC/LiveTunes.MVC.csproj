@@ -23,11 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Content\" />
+    <None Include="wwwroot\js\musicPreference.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\js\musicPreference.js" />
+    <Folder Include="Content\" />
   </ItemGroup>
 
 </Project>

@@ -5,9 +5,6 @@ namespace LiveTunes.MVC.Models
     [Table("Music Preferences")]
     public class MusicPreference
     {
-        [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
-        public UserProfile User { get; set; }
         [Key]
         public int MusicPreferenceId { get; set; }
         [Display(Name = "Artist Name")]
@@ -16,5 +13,8 @@ namespace LiveTunes.MVC.Models
         public string SongName { get; set; }
         [Display(Name = "Genre")]
         public string Genre { get; set; }
-    }
+		[ForeignKey(nameof(User))]
+		public int UserId { get; set; }
+		public UserProfile User { get; set; }
+	}
 }
