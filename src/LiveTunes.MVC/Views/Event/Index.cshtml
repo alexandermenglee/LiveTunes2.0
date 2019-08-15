@@ -1,5 +1,6 @@
 @model IEnumerable<MusicCategory>
 
+
 <script src="https://maps.googleapis.com/maps/api/js?key=GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script type="text/javascript">
@@ -29,7 +30,6 @@
         url: "https://localhost:44303/event/GetEventsByCoordinates/?lat=" + latitude + "&lon=" + longitude
         })*/
     }
-
 
    <form id="genreForm" action="/Event">
 <select form="genreForm">
