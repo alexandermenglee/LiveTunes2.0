@@ -1,6 +1,3 @@
-﻿@{
-    ViewData["Title"] = "Index";
-}
 
 <script src="https://maps.googleapis.com/maps/api/js?key=GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -18,7 +15,7 @@
         console.log(position);
 
         $.post({
-            url: 'Event/Handler',
+            url: 'Event/Handoff',
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(coordinates),
             dataType: "json",
@@ -32,11 +29,55 @@
         })*/
     }
 
-    function failure() {
-        alert("Could not retrieve location.");
-    }
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>-->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+        x = navigator.geolocation;
+
+        x.getCurrentPosition(success, failure);
+
+        function success(position) {
+            /*var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;*/
+            console.log(position);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("EventController", "GetEventsByCoordinates")',
+                contentType: "application/json; charset=utf-8",
+                data: { data: position },
+                dataType: "json",
+                success: recData => alert("Success" + recData),
+                error: error => alert('There was an error with posting to the controller.')
+            });
+
+            /*$.ajax({
+            type: "GET",
+            url: "https://localhost:44303/event/GetEventsByCoordinates/?lat=" + latitude + "&lon=" + longitude
+            })*/
+        }
+
+        function failure() {
+            alert("Could not retrieve location.");
+        }
 
 </script>
+
+
+<form id="genreForm" action="/Event">
+    <select form="genreForm" id="genres">
+        @*@foreach (var x in Model)
+            {
+                <option value=@x.Id>@Html.DisplayFor(modelItem => x.CategoryName)</option>
+            }*@
+    </select>
+    <input type="submit" value="search" />
+</form>
+<script src="~/js/Genre.js"></script>
+<script>getGenreList();</script>
 
 <div class="card">
     <div class="card-header">
@@ -57,4 +98,8 @@
     </div>
 </div>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1ff39db991e148d5faa8ba80911bc3a9232663ff
 
