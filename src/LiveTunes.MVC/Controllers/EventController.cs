@@ -43,7 +43,8 @@ namespace LiveTunes.MVC.Controllers
         static async Task<object> GetEventsByCoordinates(Coordinate coordinate)
         {
             try
-            {    
+            {   
+                //EventBriteApi
                 var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
 
                 var data = JsonConvert.DeserializeObject<JObject>(result);
