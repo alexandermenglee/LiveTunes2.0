@@ -29,7 +29,7 @@ namespace LiveTunes.MVC.Controllers
             client = new HttpClient();
             _context = context;
 
-            if (context.Events.Count() <= 1)
+			/*if (context.Events.Count() <= 1)
 			{
 				context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.10921740000003, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
 				context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.0451041, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
@@ -44,7 +44,8 @@ namespace LiveTunes.MVC.Controllers
             List<Event> musicEvents = new List<Event>();
             List<Event> allEvents;
             try
-            {    
+            {   
+                //EventBriteApi
                 var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
 
                 var data = JsonConvert.DeserializeObject<JObject>(result);
@@ -95,10 +96,18 @@ namespace LiveTunes.MVC.Controllers
             RedirectToAction("Index");
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+
+            /*var results = await GetEvents();*/
+            /*var events = await _context.Events.FirstOrDefaultAsync();*/
+            var listOfGenres = await _context.MusicCategories.Where(x => true).ToListAsync();
+
+            return View(listOfGenres);
+
         }
+
+        
 
         public async Task<IActionResult> Details(int id)
         {
@@ -118,6 +127,27 @@ namespace LiveTunes.MVC.Controllers
             evnt.Comments = await _context.Comments.Where(x => x.EventId == id).ToListAsync();
 
             return View(evnt);
+        }
+
+
+        //get by preferences
+        public async Task List(Coordinate location)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault().UserProfileId;
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
+
+            // get User Preferences
+            // and query Event brite based on location
+            // query returned data based on preferences
+            return;
+        }
+
+
+        public async Task List(int GenreId, Coordinate location)
+        {
+            // api call to get List of events by genre and location
+            return;
         }
 
         [HttpPost]
