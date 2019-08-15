@@ -2,7 +2,7 @@
     ViewData["Title"] = "Index";
 }
 
-<script src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script type="text/javascript">
 
@@ -11,18 +11,19 @@
     x.getCurrentPosition(success, failure);
 
     function success(position) {
-        /*var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;*/
+        var coordinates = {
+            longitude: position.coords.longitude,
+            latitude: position.coords.latitude
+        }
         console.log(position);
 
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("EventController", "GetEventsByCoordinates")',
+        $.post({
+            url: 'Event/Handler',
             contentType: "application/json; charset=utf-8",
-            data: { data: position },
+            data: JSON.stringify(coordinates),
             dataType: "json",
             success: recData => alert("Success" + recData),
-            error: error => alert('There was an error with posting to the controller.')
+            error: error => console.log(error)
         });
 
         /*$.ajax({
