@@ -1,11 +1,19 @@
-
+@model IEnumerable<MusicCategory>
 
 @{
-    //iewData["Title"] = "Index";
+    //viewData["Title"] = "Index";
 }
 
-<script src="~/js/musicPreference.js"></script>
-        <!---
+<!--<script src="~/js/musicPreference.js"></script>-->
+<form id="genreForm">
+<select form="genreForm">
+    @foreach (var x in Model)
+    {
+        <option value=@x.Id>@Html.DisplayFor(modelItem => x.CategoryName)</option>
+    }
+</select>
+</form>
+    <!---
     <form asp-action="Index">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
@@ -38,12 +46,12 @@
         </div>
     </form>-->
     <!-- </div>
-</div>
+    </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-} -->
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    } -->

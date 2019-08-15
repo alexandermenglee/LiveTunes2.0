@@ -29,12 +29,12 @@ namespace LiveTunes.MVC.Controllers
             _context = context;
 
 
-			if (context.Events.Count() <= 1)
+			/*if (context.Events.Count() <= 1)
 			{
 				context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.10921740000003, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
 				context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.0451041, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
 			}
-			context.SaveChangesAsync(); /*Comment this back out*/
+			context.SaveChangesAsync();*/ /*Comment this back out*/
 		}
 
         [HttpPost]
@@ -66,14 +66,16 @@ namespace LiveTunes.MVC.Controllers
             return View();
         }*/
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             /*var results = await GetEvents();*/
             /*var events = await _context.Events.FirstOrDefaultAsync();*/
+            var listOfGenres = await _context.MusicCategories.Where(x => true).ToListAsync();
 
-
-            return View();
+            return View(listOfGenres);
         }
+
+        
 
         public async Task<IActionResult> Details(int id)
         {
