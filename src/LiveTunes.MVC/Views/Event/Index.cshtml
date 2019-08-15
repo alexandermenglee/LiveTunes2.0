@@ -3,12 +3,6 @@
 }
 
 <script src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
-<style type="text/css">
-    #map {
-        width: 400px;
-        height: 400px;
-    }
-</style>
 
 <script type="text/javascript">
 
@@ -17,8 +11,8 @@
     x.getCurrentPosition(success, failure);
 
     function success(position) {
-        var myLat = position.coords.latitude;
-        var myLong = position.coords.longitude;
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
         console.log(position);
     }
 
