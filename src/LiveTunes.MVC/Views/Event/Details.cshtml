@@ -13,11 +13,10 @@
 <script src="~/js/like.js"></script>
 
 <div class="card">
-<<<<<<< HEAD
-	<div class="card-header text-center">
-		@Model.EventName
-	</div>
-	<div class="card-body container">
+    <div class="card-header text-center">
+        @Model.EventName
+    </div>
+    <div class="card-body container">
 		<div class="row">
 			<div class="col-3">
 				<img />
@@ -27,7 +26,7 @@
 				<h5 class="card-title">Date: @Model.DateTime.ToString("dd.MM.yyyy")</h5>
 				<h5 class="card-title">Time: @Model.DateTime.ToString("HH:mm")</h5>
 				<h5 class="card-title">Genre: @Model.Genre</h5>
-				<h5 class="card-title">Description @Model.Description</h5>
+				<h5 class="card-title">Description: @Model.Description</h5>
 			</div>
 			<style>
 
@@ -49,47 +48,6 @@
 
 			</div>
 		</div>
-	</div>
-	<div class="card-footer">
-		<form asp-controller="Event" asp-action="Like" asp-route-id="@Model.EventId" method="POST">
-			@if (Model.LikeCount == 0)
-			{
-				<button type="submit" class="btn btn-sm btn-secondary"><i class="fa fa-thumbs-up"></i> Do you want to be the first?</button>
-			}
-			else
-			{
-				if (Model.UserLiked)
-				{
-					<button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-thumbs-down"></i> Unlike (@Model.LikeCount)</button>
-				}
-				else
-				{
-					<button type="submit" class="btn btn-sm btn-outline-primary"><i class="fa fa-thumbs-up"></i> Like (@Model.LikeCount)</button>
-				}
-			}
-			<button type="submit" class="btn btn-sm btn-outline-secondary" disabled>@Model.Comments.Count() Comments</button>
-		</form>
-	</div>
-=======
-    <div class="card-header text-center">
-        @Model.EventName
-    </div>
-    <div class="card-body container">
-        <div class="row">
-            <div class="col-3">
-                <img />
-            </div>
-            <div class="col-6">
-                <h5 class="card-title">Name: @Model.EventName</h5>
-                <h5 class="card-title">Date: @Model.DateTime.ToString("dd.MM.yyyy")</h5>
-                <h5 class="card-title">Time: @Model.DateTime.ToString("HH:mm")</h5>
-                <h5 class="card-title">Genre: @Model.Genre</h5>
-                <h5 class="card-title">Description: @Model.Description</h5>
-            </div>
-            <div class="col-3">
-                <!-- Map -->
-            </div>
-        </div>
     </div>
     <div class="card-footer">
         <form asp-controller="Event" asp-action="Like" asp-route-id="@Model.EventId" method="POST">
@@ -110,7 +68,6 @@
             <button type="submit" class="btn btn-sm btn-outline-secondary" disabled>@Model.Comments.Count() Comments</button>
         </form> 
     </div>
->>>>>>> 1ff39db991e148d5faa8ba80911bc3a9232663ff
 </div>
 @foreach (var item in Model.Comments)
 {
