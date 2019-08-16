@@ -22,9 +22,9 @@ namespace LiveTunes.MVC.Models
         [Display(Name = "Event Date")]
         public DateTime DateTime { get; set; }
         [Display(Name = "Genre")]
-        public string Genre { get; set; }
+        public int? Genre { get; set; }
         public string Description{ get; set; }
-        public int EventbriteEventId { get; set; }
+        public string EventbriteEventId { get; set; }
 
         [NotMapped]
         public int LikeCount { get; set; }
