@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LiveTunes.MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190815185750_UpdatedBusinessVenue")]
-    partial class UpdatedBusinessVenue
+    [Migration("20190815144419_venueId_in_businessModel")]
+    partial class venueId_in_businessModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,8 +96,6 @@ namespace LiveTunes.MVC.Migrations
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<string>("Description");
-
                     b.Property<string>("EventName");
 
                     b.Property<string>("Genre");
@@ -132,19 +130,6 @@ namespace LiveTunes.MVC.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Like");
-                });
-
-            modelBuilder.Entity("LiveTunes.MVC.Models.MusicCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CategoryName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MusicCategories");
                 });
 
             modelBuilder.Entity("LiveTunes.MVC.Models.MusicPreference", b =>

@@ -2,7 +2,7 @@
 
 namespace LiveTunes.MVC.Migrations
 {
-    public partial class UpdatedBusinessVenue : Migration
+    public partial class venueId_in_businessModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

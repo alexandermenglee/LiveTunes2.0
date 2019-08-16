@@ -36,13 +36,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.User.Id)
             </td>
-			<td>
-				<a asp-action="Edit" asp-route-id="@item.BusinessProfileId">Edit</a> |
-				<a asp-action="Details" asp-route-id="@item.BusinessProfileId">Details</a> |
-				<a asp-action="Delete" asp-route-id="@item.BusinessProfileId">Delete</a> |
-
-				@Html.ActionLink("Graphs", "FindVenueEvents", new { venueId = item.VenueId })
-			</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.BusinessProfileId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.BusinessProfileId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.BusinessProfileId">Delete</a>
+            </td>
         </tr>
 }
     </tbody>

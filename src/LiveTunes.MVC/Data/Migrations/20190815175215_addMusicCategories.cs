@@ -2,7 +2,7 @@
 
 namespace LiveTunes.MVC.Migrations
 {
-    public partial class FixedEventUserEngagement : Migration
+    public partial class addMusicCategories : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

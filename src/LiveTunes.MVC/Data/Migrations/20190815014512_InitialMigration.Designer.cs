@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LiveTunes.MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190815192756_FixedEventUserEngagement")]
-    partial class FixedEventUserEngagement
+    [Migration("20190815014512_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,8 +56,6 @@ namespace LiveTunes.MVC.Migrations
 
                     b.Property<string>("UserId");
 
-                    b.Property<int>("VenueId");
-
                     b.HasKey("BusinessProfileId");
 
                     b.HasIndex("UserId");
@@ -96,8 +94,6 @@ namespace LiveTunes.MVC.Migrations
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<string>("Description");
-
                     b.Property<string>("EventName");
 
                     b.Property<string>("Genre");
@@ -105,10 +101,6 @@ namespace LiveTunes.MVC.Migrations
                     b.Property<double>("Latitude");
 
                     b.Property<double>("Longitude");
-
-                    b.Property<string>("Venue");
-
-                    b.Property<int>("VenueId");
 
                     b.HasKey("EventId");
 
@@ -132,19 +124,6 @@ namespace LiveTunes.MVC.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Like");
-                });
-
-            modelBuilder.Entity("LiveTunes.MVC.Models.MusicCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CategoryName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MusicCategories");
                 });
 
             modelBuilder.Entity("LiveTunes.MVC.Models.MusicPreference", b =>
@@ -393,7 +372,7 @@ namespace LiveTunes.MVC.Migrations
             modelBuilder.Entity("LiveTunes.MVC.Models.Comment", b =>
                 {
                     b.HasOne("LiveTunes.MVC.Models.Event", "Event")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
