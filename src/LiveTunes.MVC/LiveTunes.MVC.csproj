@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Content\" />
+    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
