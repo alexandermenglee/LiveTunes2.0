@@ -107,15 +107,16 @@ namespace LiveTunes.MVC.Controllers
             var evnt = await _context.Events.FirstOrDefaultAsync(x => x.EventId == id);
             if (evnt == null) return NotFound();
 
-            
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault().UserProfileId;
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
+
             ViewBag.UserFirstName = userProfile.FirstName;
             ViewBag.UserLastName = userProfile.LastName;
 
 
             evnt.LikeCount = await _context.Likes.CountAsync(x => x.EventId == id);
+            evnt.CommentCount = await _context.Comments.CountAsync(x => x.EventId == id);
             evnt.UserLiked = await _context.Likes.AnyAsync(x => x.EventId == id && x.UserId == userProfileId);
             evnt.Comments = await _context.Comments.Where(x => x.EventId == id).ToListAsync();
 
@@ -150,8 +151,7 @@ namespace LiveTunes.MVC.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
-            // var userProfileId = userProfile.UserProfileId;
-            var userProfileId = 2;
+            var userProfileId = userProfile.UserProfileId;
 
             var like = await _context.Likes.FirstOrDefaultAsync(x => x.UserId == userProfileId && x.EventId == id);
             if (like != null)
@@ -172,5 +172,30 @@ namespace LiveTunes.MVC.Controllers
 
             return RedirectToAction("Details", new { id });
         }
+
+        // [HttpPost]
+        // public async Task<IActionResult> Comment(int id, string commentText)
+        // {
+        //     var evnt = await _context.Events.FirstOrDefaultAsync(x => x.EventId == id);
+        //     if (evnt == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //     var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
+        //     var userProfileId = userProfile.UserProfileId;
+
+        //     var newComment = new Comment();
+        //     newComment.DateTime = DateTime.Now;
+        //     newComment.UserId = userProfileId;
+        //     newComment.EventId = evnt.EventId;
+        //     newComment.CommentText = commentText;
+
+        //     _context.Comments.Add(newComment);
+        //     await _context.SaveChangesAsync();
+
+        //     return RedirectToAction("Details", new { id });
+        // }
     }
 }
