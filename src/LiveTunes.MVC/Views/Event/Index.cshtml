@@ -1,9 +1,11 @@
+@model IEnumerable<LiveTunes.MVC.Models.Event>
+
 @{
 
     ViewData["Title"] = "Index";
 }
 
-<script src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script type="text/javascript">
     x = navigator.geolocation;
@@ -35,10 +37,10 @@
 </script>
 
 
-<select class="genres">
+<select class="genres"></select>
 
-</select>
-
+@foreach(var item in Model)
+{
 <div class="card">
     <div class="card-header">
         Event Name
@@ -49,12 +51,14 @@
                 <img />
             </div>
             <div class="col-9">
-                <h5 class="card-title">Name: </h5>
-                <h5 class="card-title">Date: </h5>
-                <h5 class="card-title">Time: </h5>
-                <h5 class="card-title">Genre: </h5>
+                <h5 class="card-title">Name: @Html.DisplayFor(modelItem => item.EventName) </h5>
+                <h5 class="card-title">Date: @Html.DisplayFor(modelItem => item.DateTime) </h5>
+                <h5 class="card-title">Time: @Html.DisplayFor(modelItem => item.DateTime) </h5>
+                <h5 class="card-title">Genre: @Html.DisplayFor(modelItem => item.Genre) </h5>
             </div>
         </div>
     </div>
-</div>
+</div>    
+}
+
 <script src="~/js/Genre.js"></script>

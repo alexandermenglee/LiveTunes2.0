@@ -21,10 +21,8 @@ namespace LiveTunes.MVC.Controllers
     {
         private static HttpClient client;
         private readonly ApplicationDbContext _context;
-        /*public dynamic results;*/
         private Coordinate coordinates;
 
-        /*public IEnumerable<Event> events;*/
         public EventController(ApplicationDbContext context)
         {
             client = new HttpClient();
@@ -44,14 +42,13 @@ namespace LiveTunes.MVC.Controllers
         {
             try
             {    
-                var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
+                var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=15mi&token={EventbriteAPIToken.Token}");
 
                 var data = JsonConvert.DeserializeObject<JObject>(result);
 
                 var events = data["events"]; 
                 List<JToken> EVENTS = new List<JToken>();
                 EVENTS = data["events"].Where(e => (string)e["category_id"] == "103").ToList(); 
-
                 for (int i = 0; i < EVENTS.Count; i++)
                 {
                     var eventsFromDB = _context.Events.Where(e => e.EventbriteEventId.Equals((string)EVENTS[i]["id"])).ToList();
@@ -63,7 +60,7 @@ namespace LiveTunes.MVC.Controllers
 
                     Event newEvent = new Event();
 
-                    newEvent.EventName = (string)EVENTS[i]["name"]["text"];
+                    newEvent.EventName = (string)EVENTS[i]["name"]["text"]; 
                     newEvent.VenueId = (int)EVENTS[i]["venue"]["id"];
                     newEvent.Latitude = (double)EVENTS[i]["venue"]["latitude"];
                     newEvent.Longitude = (double)EVENTS[i]["venue"]["longitude"];
@@ -83,6 +80,7 @@ namespace LiveTunes.MVC.Controllers
                 }
 
                 await _context.SaveChangesAsync();
+
             }
             catch (HttpRequestException e)
             {
@@ -90,10 +88,10 @@ namespace LiveTunes.MVC.Controllers
             }
         }
 
+        [HttpPost]
         public async Task Handoff([FromBody] Coordinate coordinate)
         {
             await GetEventsByCoordinates(coordinate);
-            RedirectToAction("Index");
         }
 
         public IActionResult Index()
