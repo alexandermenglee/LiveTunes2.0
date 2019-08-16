@@ -13,11 +13,18 @@
 <script src="~/js/like.js"></script>
 
 <div class="card">
+<<<<<<< HEAD
     <div class="card-header text-center">
         @Model.EventName
     </div>
     <div class="card-body container">
 <<<<<<< HEAD
+=======
+	<div class="card-header text-center">
+		@Model.EventName
+	</div>
+	<div class="card-body container">
+>>>>>>> parent of 9dbd9c5... Fixing merge conflicts on my end
 		<div class="row">
 			<div class="col-3">
 				<img />
@@ -49,6 +56,7 @@
 
 			</div>
 		</div>
+<<<<<<< HEAD
 =======
         <div class="row">
             <div class="col-3">
@@ -86,6 +94,29 @@
             <button type="submit" class="btn btn-sm btn-outline-secondary" disabled>@Model.Comments.Count() Comments</button>
         </form> 
     </div>
+=======
+	</div>
+	<div class="card-footer">
+		<form asp-controller="Event" asp-action="Like" asp-route-id="@Model.EventId" method="POST">
+			@if (Model.LikeCount == 0)
+			{
+				<button type="submit" class="btn btn-sm btn-secondary"><i class="fa fa-thumbs-up"></i> Do you want to be the first?</button>
+			}
+			else
+			{
+				if (Model.UserLiked)
+				{
+					<button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-thumbs-down"></i> Unlike (@Model.LikeCount)</button>
+				}
+				else
+				{
+					<button type="submit" class="btn btn-sm btn-outline-primary"><i class="fa fa-thumbs-up"></i> Like (@Model.LikeCount)</button>
+				}
+			}
+			<button type="submit" class="btn btn-sm btn-outline-secondary" disabled>@Model.Comments.Count() Comments</button>
+		</form>
+	</div>
+>>>>>>> parent of 9dbd9c5... Fixing merge conflicts on my end
 </div>
 @foreach (var item in Model.Comments)
 {

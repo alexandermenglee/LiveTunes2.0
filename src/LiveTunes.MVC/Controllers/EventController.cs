@@ -21,6 +21,7 @@ namespace LiveTunes.MVC.Controllers
     {
         private static HttpClient client;
         private readonly ApplicationDbContext _context;
+        /*public dynamic results;*/
         private Coordinate coordinates;
 
         /*public IEnumerable<Event> events;*/
@@ -30,6 +31,10 @@ namespace LiveTunes.MVC.Controllers
             _context = context;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 9dbd9c5... Fixing merge conflicts on my end
 			//if (context.Events.Count() <= 1)
 			//{
 			//	context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.10921740000003, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
@@ -48,48 +53,14 @@ namespace LiveTunes.MVC.Controllers
 		}
 
         [HttpPost]
-        public async Task<object> GetEventsByCoordinates(Coordinate coordinate)
+        static async Task<object> GetEventsByCoordinates(Coordinate coordinate)
         {
-            List<Event> musicEvents = new List<Event>();
-            List<Event> allEvents;
             try
             {    
                 var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
 
                 var data = JsonConvert.DeserializeObject<JObject>(result);
-
-                var events = data["events"]; // list of JObjects
-                var catId103 = data["events"].Where(e => (string)e["category_id"] == "103").ToList(); // list of booleans 
-
-                List<JToken> EVENTS = new List<JToken>();
-
-                /*for(int i = 0; i < catId103.Count; i++)
-                {
-                    if(catId103[i] == true)
-                    {
-                        EVENTS.Add(events[i]);
-                    }
-                }
-*/
-                for(int i = 0; i < EVENTS.Count; i++)
-                {
-                    var eventsFromDB = _context.Events.Where(e => e.EventbriteEventId == (int)EVENTS[i]["id"]).ToList();
-                    
-                    if(eventsFromDB.Count != 0)
-                    {
-                        continue;
-                    }
-
-                    Event newEvent = new Event();
-
-                    newEvent.EventName = (string)EVENTS[i]["name"]["text"];
-                    newEvent.VenueId = (int)EVENTS[i]["venue"]["id"];
-                    newEvent.Latitude = (double)EVENTS[i]["venue"]["latitude"];
-                    newEvent.Longitude = (double)EVENTS[i]["venue"]["longitude"];
-                    newEvent.EventbriteEventId = (int)EVENTS[i]["id"];
-                    newEvent.Description = (string)EVENTS[i]["description"];
-                }
-
+                var eventName = data["events"];
                 return data;
             }
             catch (HttpRequestException e)
