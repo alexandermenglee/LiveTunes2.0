@@ -17,6 +17,7 @@
         @Model.EventName
     </div>
     <div class="card-body container">
+<<<<<<< HEAD
 		<div class="row">
 			<div class="col-3">
 				<img />
@@ -48,6 +49,23 @@
 
 			</div>
 		</div>
+=======
+        <div class="row">
+            <div class="col-3">
+                <img />
+            </div>
+            <div class="col-6">
+                <h5 class="card-title">Name: @Model.EventName</h5>
+                <h5 class="card-title">Date: @Model.DateTime.ToString("dd.MM.yyyy")</h5>
+                <h5 class="card-title">Time: @Model.DateTime.ToString("HH:mm")</h5>
+                <h5 class="card-title">Genre: @Model.Genre</h5>
+                <h5 class="card-title">Description @Model.Description</h5>
+            </div>
+            <div class="col-3">
+                <!-- Map -->
+            </div>
+        </div>
+>>>>>>> parent of 1ff39db... filtered events by category_id
     </div>
     <div class="card-footer">
         <form asp-controller="Event" asp-action="Like" asp-route-id="@Model.EventId" method="POST">
