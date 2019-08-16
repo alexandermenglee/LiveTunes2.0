@@ -90,10 +90,11 @@ namespace LiveTunes.MVC.Controllers
             }
         }
 
+
+        [HttpPost]
         public async Task Handoff([FromBody] Coordinate coordinate)
         {
             await GetEventsByCoordinates(coordinate);
-            RedirectToAction("Index");
         }
 
         public IActionResult Index()

@@ -1,7 +1,7 @@
 ﻿function getGenreList() {
     $.ajax({
         type: "GET",
-        url: "http://localhost:49828/musiccategory/list",
+        url: "musiccategory/list",
         success(data) {
             //jquery to populate select list
             console.log(data);
