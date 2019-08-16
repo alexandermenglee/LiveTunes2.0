@@ -57,19 +57,11 @@ namespace LiveTunes.MVC.Controllers
                 Event add = new Event();
                 for (int i = 0; i < EVENTS.Count; i++)
                 {
-                    var eventsFromDB = _context.Events.Where(e => e.EventbriteEventId.Equals((string)EVENTS[i]["id"])).ToList();
+                    var eventFromDB = _context.Events.Where(e => e.EventbriteEventId.Equals((string)EVENTS[i]["id"])).FirstOrDefault();
 
-                    if (eventsFromDB.Count != 0)
+                    if (eventFromDB != null)
                     {
-                        add = new Event();
-                        add.EventName = (string)EVENTS[i]["name"]["text"];
-                        add.VenueId = (int)EVENTS[i]["venue"]["id"];
-                        add.Latitude = (double)EVENTS[i]["venue"]["latitude"];
-                        add.Longitude = (double)EVENTS[i]["venue"]["longitude"];
-                        add.EventbriteEventId = (string)EVENTS[i]["id"];
-                        add.Description = (string)EVENTS[i]["description"]["text"];
-                        add.DateTime = (DateTime)EVENTS[i]["start"]["local"];
-                        returnEvents.Add(add);
+                        returnEvents.Add(eventFromDB);
                         continue;
                     }
 
