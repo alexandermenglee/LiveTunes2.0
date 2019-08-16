@@ -17,6 +17,7 @@ namespace LiveTunes.MVC.Data
         public DbSet<MusicPreference> MusicPreferences { get; set; }
         public DbSet<Survey> Surveys { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<MusicCategory> MusicCategories { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

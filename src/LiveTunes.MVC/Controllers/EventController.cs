@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using Newtonsoft.Json.Linq;
+using LiveTunes.MVC.Class;
 
 namespace LiveTunes.MVC.Controllers
 {
@@ -20,7 +21,8 @@ namespace LiveTunes.MVC.Controllers
     {
         private static HttpClient client;
         private readonly ApplicationDbContext _context;
-        public dynamic results;
+        /*public dynamic results;*/
+        private Coordinate coordinates;
 
         /*public IEnumerable<Event> events;*/
         public EventController(ApplicationDbContext context)
@@ -29,49 +31,73 @@ namespace LiveTunes.MVC.Controllers
             _context = context;
 
 
-			if (context.Events.Count() <= 1)
-			{
-				context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.10921740000003, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
-				context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.0451041, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
-			}
-			context.SaveChangesAsync(); /*Comment this back out*/
+			//if (context.Events.Count() <= 1)
+			//{
+			//	context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.10921740000003, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
+			//	context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.0451041, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
+			//}
+			//context.SaveChangesAsync();
 		}
 
         [HttpPost]
-        static async Task<object> GetEventsByCoordinates()
+        public async Task GetEventsByCoordinates(Coordinate coordinate)
         {
             try
-            {
-                var result = await client.GetStringAsync("$https://www.eventbriteapi.com/v3/events/search?location.longitude={longitude}&location.latitude={latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
-
-
+            {    
+                var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
 
                 var data = JsonConvert.DeserializeObject<JObject>(result);
-                var eventName = data["events"];
-                return data;
+
+                var events = data["events"]; 
+                List<JToken> EVENTS = new List<JToken>();
+                EVENTS = data["events"].Where(e => (string)e["category_id"] == "103").ToList(); 
+
+                for (int i = 0; i < EVENTS.Count; i++)
+                {
+                    var eventsFromDB = _context.Events.Where(e => e.EventbriteEventId.Equals((string)EVENTS[i]["id"])).ToList();
+
+                    if (eventsFromDB.Count != 0)
+                    {
+                        continue;
+                    }
+
+                    Event newEvent = new Event();
+
+                    newEvent.EventName = (string)EVENTS[i]["name"]["text"];
+                    newEvent.VenueId = (int)EVENTS[i]["venue"]["id"];
+                    newEvent.Latitude = (double)EVENTS[i]["venue"]["latitude"];
+                    newEvent.Longitude = (double)EVENTS[i]["venue"]["longitude"];
+                    newEvent.EventbriteEventId = (string)EVENTS[i]["id"];
+                    newEvent.Description = (string)EVENTS[i]["description"]["text"];
+                    newEvent.DateTime = (DateTime)EVENTS[i]["start"]["local"];
+                    if ((string)EVENTS[i]["subcategory_id"] == null)
+                    {
+                        newEvent.Genre = 3019;
+                    }
+                    else
+                    {
+                        newEvent.Genre = int.Parse((string)EVENTS[i]["subcategory_id"]);
+                    }
+
+                    await _context.Events.AddAsync(newEvent);
+                }
+
+                await _context.SaveChangesAsync();
             }
             catch (HttpRequestException e)
             {
-                return e;
+                return;
             }
         }
 
-
-       /* public async Task<IActionResult> Index()
+        public async Task Handoff([FromBody] Coordinate coordinate)
         {
-            *//*var results = await GetEvents();*/
-            /*var events = await _context.Events.FirstOrDefaultAsync();*//*
-
-
-            return View();
-        }*/
+            await GetEventsByCoordinates(coordinate);
+            RedirectToAction("Index");
+        }
 
         public IActionResult Index()
         {
-            /*var results = await GetEvents();*/
-            /*var events = await _context.Events.FirstOrDefaultAsync();*/
-
-
             return View();
         }
 
@@ -94,6 +120,26 @@ namespace LiveTunes.MVC.Controllers
             evnt.Comments = await _context.Comments.Where(x => x.EventId == id).ToListAsync();
 
             return View(evnt);
+        }
+
+        //get by preferences
+        public async Task List(Coordinate location)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault().UserProfileId;
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
+
+            // get User Preferences
+            // and query Event brite based on location
+            // query returned data based on preferences
+            return;
+        }
+
+
+        public async Task List(int GenreId, Coordinate location)
+        {
+            // api call to get List of events by genre and location
+            return;
         }
 
         [HttpPost]

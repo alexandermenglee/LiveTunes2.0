@@ -125,22 +125,22 @@ namespace LiveTunes.MVC.Migrations
                     b.ToTable("Like");
                 });
 
-            modelBuilder.Entity("LiveTunes.WebAPI.Models.MusicPreference", b =>
-                {
-                    b.Property<int>("MusicPreferenceId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+            //modelBuilder.Entity("LiveTunes.WebAPI.Models.MusicPreference", b =>
+            //    {
+            //        b.Property<int>("MusicPreferenceId")
+            //            .ValueGeneratedOnAdd()
+            //            .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ArtistName");
+            //        b.Property<string>("ArtistName");
 
-                    b.Property<string>("Genre");
+            //        b.Property<string>("Genre");
 
-                    b.Property<string>("SongName");
+            //        b.Property<string>("SongName");
 
-                    b.HasKey("MusicPreferenceId");
+            //        b.HasKey("MusicPreferenceId");
 
-                    b.ToTable("Music Preferences");
-                });
+            //        b.ToTable("Music Preferences");
+            //    });
 
             modelBuilder.Entity("LiveTunes.WebAPI.Models.Survey", b =>
                 {

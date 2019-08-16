@@ -4,14 +4,16 @@ using LiveTunes.MVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace LiveTunes.MVC.Data.Migrations
+namespace LiveTunes.MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190815180227_UpdatedBusinessProfileModel")]
+    partial class UpdatedBusinessProfileModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,9 +100,7 @@ namespace LiveTunes.MVC.Data.Migrations
 
                     b.Property<string>("EventName");
 
-                    b.Property<string>("EventbriteEventId");
-
-                    b.Property<int>("Genre");
+                    b.Property<string>("Genre");
 
                     b.Property<double>("Latitude");
 
@@ -132,19 +132,6 @@ namespace LiveTunes.MVC.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Like");
-                });
-
-            modelBuilder.Entity("LiveTunes.MVC.Models.MusicCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CategoryName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MusicCategories");
                 });
 
             modelBuilder.Entity("LiveTunes.MVC.Models.MusicPreference", b =>

@@ -45,20 +45,20 @@ namespace LiveTunes.MVC.Migrations
                     table.PrimaryKey("PK_Event", x => x.EventId);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Music Preferences",
-                columns: table => new
-                {
-                    MusicPreferenceId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ArtistName = table.Column<string>(nullable: true),
-                    SongName = table.Column<string>(nullable: true),
-                    Genre = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Music Preferences", x => x.MusicPreferenceId);
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "Music Preferences",
+            //    columns: table => new
+            //    {
+            //        MusicPreferenceId = table.Column<int>(nullable: false)
+            //            .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+            //        ArtistName = table.Column<string>(nullable: true),
+            //        SongName = table.Column<string>(nullable: true),
+            //        Genre = table.Column<string>(nullable: true)
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_Music Preferences", x => x.MusicPreferenceId);
+            //    });
 
             migrationBuilder.CreateTable(
                 name: "User Profile",

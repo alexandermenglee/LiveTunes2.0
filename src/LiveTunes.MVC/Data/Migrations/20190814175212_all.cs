@@ -12,10 +12,10 @@ namespace LiveTunes.MVC.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Music Preferences_UserId",
-                table: "Music Preferences",
-                column: "UserId");
+            //migrationBuilder.CreateIndex(
+            //    name: "IX_Music Preferences_UserId",
+            //    table: "Music Preferences",
+            //    column: "UserId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Music Preferences_User Profile_UserId",
