@@ -24,7 +24,7 @@ function updateComment() {
 function addComment() {
     $.ajax({
         type: "GET",
-        url: "https://localhost:44303/comment/Create/?EventId=" + EventId + "&text=" + text,
+        url: "https://localhost:5001/comment/Create/?EventId=" + EventId + "&text=" + text,
         success: function (data) {
             console.log("works");
         },

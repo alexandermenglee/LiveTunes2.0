@@ -28,6 +28,8 @@ namespace LiveTunes.MVC.Models
         [NotMapped]
         public int LikeCount { get; set; }
         [NotMapped]
+        public int CommentCount { get; set; }
+        [NotMapped]
         public bool UserLiked { get; set; }
         
         public virtual List<Like> Likes { get; set; }
