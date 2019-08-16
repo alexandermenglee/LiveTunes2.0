@@ -182,29 +182,29 @@ namespace LiveTunes.MVC.Controllers
             return RedirectToAction("Details", new { id });
         }
 
-        // [HttpPost]
-        // public async Task<IActionResult> Comment(int id, string commentText)
-        // {
-        //     var evnt = await _context.Events.FirstOrDefaultAsync(x => x.EventId == id);
-        //     if (evnt == null)
-        //     {
-        //         return NotFound();
-        //     }
+        [HttpPost]
+        public async Task<IActionResult> Comment(int id, string commentText)
+        {
+            var evnt = await _context.Events.FirstOrDefaultAsync(x => x.EventId == id);
+            if (evnt == null)
+            {
+                return NotFound();
+            }
 
-        //     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //     var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
-        //     var userProfileId = userProfile.UserProfileId;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
+            var userProfileId = userProfile.UserProfileId;
 
-        //     var newComment = new Comment();
-        //     newComment.DateTime = DateTime.Now;
-        //     newComment.UserId = userProfileId;
-        //     newComment.EventId = evnt.EventId;
-        //     newComment.CommentText = commentText;
+            var newComment = new Comment();
+            newComment.DateTime = DateTime.Now;
+            newComment.UserId = userProfileId;
+            newComment.EventId = evnt.EventId;
+            newComment.CommentText = commentText;
 
-        //     _context.Comments.Add(newComment);
-        //     await _context.SaveChangesAsync();
+            _context.Comments.Add(newComment);
+            await _context.SaveChangesAsync();
 
-        //     return RedirectToAction("Details", new { id });
-        // }
+            return RedirectToAction("Details", new { id });
+        }
     }
 }
