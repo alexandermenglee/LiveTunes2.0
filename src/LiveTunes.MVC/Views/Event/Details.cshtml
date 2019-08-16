@@ -4,13 +4,14 @@
     ViewData["Title"] = "Details";
 }
 <script>
-    var EventId = @Model.EventId
+        var EventId = @Model.EventId
 </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
             crossorigin="anonymous"></script>
 <script src="~/js/comment.js"></script>
 <script src="~/js/like.js"></script>
+<script src="~/js/Genre.js"></script>
 
 <div class="card">
     <div class="card-header text-center">
@@ -25,7 +26,7 @@
                 <h5 class="card-title">Name: @Model.EventName</h5>
                 <h5 class="card-title">Date: @Model.DateTime.ToString("dd.MM.yyyy")</h5>
                 <h5 class="card-title">Time: @Model.DateTime.ToString("HH:mm")</h5>
-                <h5 class="card-title">Genre: @Model.Genre</h5>
+                <h5 class="card-title">Genre: <span id="genre"></span></h5>
                 <h5 class="card-title">Description @Model.Description</h5>
             </div>
             <div class="col-3">
@@ -33,6 +34,30 @@
             </div>
         </div>
     </div>
+
+    <script>
+genreList = [];
+function getGenreList() {
+    $.ajax({
+        type: "GET",
+        url: "/musiccategory/list",
+        success(data) {
+            //jquery to populate select list
+            console.log(data);
+            genreList = data;
+            var genreDiv = document.getElementById("genre");
+            genreDiv.innerHTML = data.filter(x => x.id == @Model.Genre)[0].categoryName;
+
+
+                }
+            });
+}
+getGenreList();
+
+
+        @*getGenre(@Model.Genre);*@
+    </script>
+
     <div class="card-footer">
         <form asp-controller="Event" asp-action="Like" asp-route-id="@Model.EventId" method="POST">
             @if(Model.LikeCount == 0)
