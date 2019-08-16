@@ -21,6 +21,7 @@ namespace LiveTunes.MVC.Controllers
     {
         private static HttpClient client;
         private readonly ApplicationDbContext _context;
+        /*public dynamic results;*/
         private Coordinate coordinates;
 
         /*public IEnumerable<Event> events;*/
@@ -29,21 +30,20 @@ namespace LiveTunes.MVC.Controllers
             client = new HttpClient();
             _context = context;
 
-			/*if (context.Events.Count() <= 1)
-			{
-				context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.10921740000003, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
-				context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.0451041, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
-			}
 
-			context.SaveChangesAsync(); /*Comment this back out*/
+			//if (context.Events.Count() <= 1)
+			//{
+			//	context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.10921740000003, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
+			//	context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.0451041, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
+			//}
+			//context.SaveChangesAsync();
 		}
 
         [HttpPost]
         public async Task GetEventsByCoordinates(Coordinate coordinate)
         {
             try
-            {   
-                //EventBriteApi
+            {    
                 var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
 
                 var data = JsonConvert.DeserializeObject<JObject>(result);
@@ -83,7 +83,6 @@ namespace LiveTunes.MVC.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-
             }
             catch (HttpRequestException e)
             {
@@ -97,15 +96,9 @@ namespace LiveTunes.MVC.Controllers
             RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-
-            /*var results = await GetEvents();*/
-            /*var events = await _context.Events.FirstOrDefaultAsync();*/
-            var listOfGenres = await _context.MusicCategories.Where(x => true).ToListAsync();
-
-            return View(listOfGenres);
-
+            return View();
         }
 
         public async Task<IActionResult> Details(int id)

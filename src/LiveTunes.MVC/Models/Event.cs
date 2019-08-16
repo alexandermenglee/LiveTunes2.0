@@ -8,11 +8,11 @@ namespace LiveTunes.MVC.Models
     [Table("Event")]
     public class Event
     {
-        [Key]
-        public int EventId { get; set; }
         public int VenueId { get; set; }
         [Display(Name = "Venue Name")]
         public string Venue { get; set; }
+        [Key]
+        public int EventId { get; set; }
         [Display(Name = "Latitude")]
         public double Latitude { get; set; }
         [Display(Name = "Longitude")]
@@ -25,7 +25,6 @@ namespace LiveTunes.MVC.Models
         public int? Genre { get; set; }
         public string Description{ get; set; }
         public string EventbriteEventId { get; set; }
-
         [NotMapped]
         public int LikeCount { get; set; }
         [NotMapped]
@@ -33,6 +32,5 @@ namespace LiveTunes.MVC.Models
         
         public virtual List<Like> Likes { get; set; }
         public virtual List<Comment> Comments { get; set; }
-       
     }
 }

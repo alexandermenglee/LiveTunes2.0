@@ -2,21 +2,22 @@
 
 namespace LiveTunes.MVC.Migrations
 {
-    public partial class updatingdatabase : Migration
+    public partial class venueId_in_businessModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Description",
-                table: "Event",
-                nullable: true);
+            migrationBuilder.AddColumn<int>(
+                name: "VenueId",
+                table: "Business Profile",
+                nullable: false,
+                defaultValue: 0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Description",
-                table: "Event");
+                name: "VenueId",
+                table: "Business Profile");
         }
     }
 }
