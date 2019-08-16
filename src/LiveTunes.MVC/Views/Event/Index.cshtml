@@ -22,7 +22,12 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(coordinates),
             dataType: "json",
-            success: recData => alert("Success" + recData),
+            success: function (recData) {
+                console.log("Success" + recData)
+                for (let i = 0; i < recData.length; i++) {
+                    console.log(recData[i]);
+                }
+            },
             error: error => console.log(error)
         });
 

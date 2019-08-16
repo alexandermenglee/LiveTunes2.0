@@ -40,24 +40,36 @@ namespace LiveTunes.MVC.Controllers
 		}
 
         [HttpPost]
-        public async Task GetEventsByCoordinates(Coordinate coordinate)
+        public async Task<List<Event>> GetEventsByCoordinates(Coordinate coordinate)
         {
+
+            List<Event> returnEvents = new List<Event>();
             try
-            {    
+            {
                 var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
 
                 var data = JsonConvert.DeserializeObject<JObject>(result);
 
-                var events = data["events"]; 
+                var events = data["events"];
                 List<JToken> EVENTS = new List<JToken>();
-                EVENTS = data["events"].Where(e => (string)e["category_id"] == "103").ToList(); 
+                EVENTS = data["events"].Where(e => (string)e["category_id"] == "103").ToList();
 
+                Event add = new Event();
                 for (int i = 0; i < EVENTS.Count; i++)
                 {
                     var eventsFromDB = _context.Events.Where(e => e.EventbriteEventId.Equals((string)EVENTS[i]["id"])).ToList();
 
                     if (eventsFromDB.Count != 0)
                     {
+                        add = new Event();
+                        add.EventName = (string)EVENTS[i]["name"]["text"];
+                        add.VenueId = (int)EVENTS[i]["venue"]["id"];
+                        add.Latitude = (double)EVENTS[i]["venue"]["latitude"];
+                        add.Longitude = (double)EVENTS[i]["venue"]["longitude"];
+                        add.EventbriteEventId = (string)EVENTS[i]["id"];
+                        add.Description = (string)EVENTS[i]["description"]["text"];
+                        add.DateTime = (DateTime)EVENTS[i]["start"]["local"];
+                        returnEvents.Add(add);
                         continue;
                     }
 
@@ -70,6 +82,9 @@ namespace LiveTunes.MVC.Controllers
                     newEvent.EventbriteEventId = (string)EVENTS[i]["id"];
                     newEvent.Description = (string)EVENTS[i]["description"]["text"];
                     newEvent.DateTime = (DateTime)EVENTS[i]["start"]["local"];
+
+                    returnEvents.Add(newEvent);
+
                     if ((string)EVENTS[i]["subcategory_id"] == null)
                     {
                         newEvent.Genre = 3019;
@@ -86,15 +101,17 @@ namespace LiveTunes.MVC.Controllers
             }
             catch (HttpRequestException e)
             {
-                return;
+                return null;
             }
+
+            return returnEvents;
         }
 
 
         [HttpPost]
-        public async Task Handoff([FromBody] Coordinate coordinate)
+        public async Task<List<Event>> Handoff([FromBody] Coordinate coordinate)
         {
-            await GetEventsByCoordinates(coordinate);
+          return await GetEventsByCoordinates(coordinate);
         }
 
         public IActionResult Index()
