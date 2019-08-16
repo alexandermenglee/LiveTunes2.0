@@ -7,7 +7,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
 
-<select class="genres">
+< select class="genres">
 </select>
 
 <style>
@@ -46,6 +46,7 @@
                     events = recData;
                     var eventList = document.getElementById("eventList");
                     console.log("Success" + recData);
+                    eventList.innerHTML = "";
                     for (let i = 0; i < recData.length; i++) {
                         console.log(recData[i]);
                         eventList.innerHTML += '<div class="card">\
@@ -71,6 +72,36 @@
                     }
                 }
             });
+
+        function getEventsByGenre(genreId) {
+                    events = recData;
+                    var eventList = document.getElementById("eventList");
+                    console.log("Success" + recData);
+                    eventList.innerHTML = "";
+                    for (let i = 0; i < recData.length; i++) {
+                        console.log(recData[i]);
+                        eventList.innerHTML += '<div class="card">\
+                                <div class="card-header">\
+                                    ' + recData[i].eventName + '\
+                                </div>\
+                                <div class="card-body container">\
+                                    <div class="row">\
+                                        <div class="col-3">\
+                                            <img />\
+                                        </div>\
+                                        <div class="col-9">\
+                                            <h5 class="card-title">Name: </h5>\
+                                            <h5 class="card-title">Date:' + recData[i].dateTime + ' </h5>\
+                                            <h5 class="card-title">Time: </h5>\
+                                            <h5 class="card-title">Genre:' + getGenre(recData[i].genre) + ' </h5>\
+                                        </div>\
+                                        <a href="/event/details/'+ recData[i].eventId +'"><input type="button" value="Go"/></a>\
+                                    </div>\
+                                </div>\
+                            </div>';
+
+                    }
+        }
     }
 
 
