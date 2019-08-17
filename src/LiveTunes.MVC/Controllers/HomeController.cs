@@ -7,13 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 using LiveTunes.MVC.Models;
 using LiveTunes.MVC.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace LiveTunes.MVC.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext _context;
         public HomeController(ApplicationDbContext a)
         {
+            _context = a;
+
             using (var transaction = a.Database.BeginTransaction())
             {
                 //a.MusicCategories.Add(new Models.MusicCategory(3001, "Alternative"));
@@ -45,6 +49,22 @@ namespace LiveTunes.MVC.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<ActionResult> LikedEvents(){
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault().UserProfileId;
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
+
+            var likes = _context.Likes.Where(x => x.UserId == userProfileId);
+            List<Event> events = new List<Event>();
+            
+            foreach (var like in likes)
+            {
+                events.Add(_context.Events.Where(x => x.EventId == like.EventId).FirstOrDefault());
+            }
+
+            return View(events);
         }
 
         public IActionResult Privacy()
