@@ -17,6 +17,9 @@ using LiveTunes.MVC.Class;
 
 namespace LiveTunes.MVC.Controllers
 {
+
+
+
     public class EventController : Controller
     {
         private static HttpClient client;
@@ -39,54 +42,76 @@ namespace LiveTunes.MVC.Controllers
 			//context.SaveChangesAsync();
 		}
 
+        
+
+        private double getDistance(Coordinates g1, Coordinates g2)
+        {
+           
+            return g1.DistanceTo(g2);
+        }
+
+        public async Task<List<Event>> getEventsByDistance(Coordinate coordinate, double d)
+        {
+            var sCoord = new Coordinates(double.Parse(coordinate.Latitude), double.Parse(coordinate.Longitude));
+            return await _context.Events.Where(x => getDistance(sCoord, new Coordinates(x.Latitude, x.Longitude)) < d).ToListAsync();
+        }
+
         [HttpPost]
         public async Task<List<Event>> GetEventsByCoordinates(Coordinate coordinate)
         {
-
             List<Event> returnEvents = new List<Event>();
             try
             {
-                var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=&token={EventbriteAPIToken.Token}");
-
+                var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=50km&token={EventbriteAPIToken.Token}");
                 var data = JsonConvert.DeserializeObject<JObject>(result);
+                int ObjectCount = (int)data["pagination"]["object_count"];
 
-                var events = data["events"];
-                List<JToken> EVENTS = new List<JToken>();
-                EVENTS = data["events"].Where(e => (string)e["category_id"] == "103").ToList();
-
-                Event add = new Event();
-                for (int i = 0; i < EVENTS.Count; i++)
+                for (int j = 1; j <= (double)ObjectCount / 50; j++)
                 {
-                    var eventFromDB = _context.Events.Where(e => e.EventbriteEventId.Equals((string)EVENTS[i]["id"])).FirstOrDefault();
+                    result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=50km&token={EventbriteAPIToken.Token}&page={j}");
 
-                    if (eventFromDB != null)
+                    data = JsonConvert.DeserializeObject<JObject>(result);
+
+                    var events = data["events"];
+
+                    //for (int i = 0; i < (int)data["pageCount"]; i++) { Console.WriteLine(i); }
+                    List<JToken> EVENTS = new List<JToken>();
+                    EVENTS = data["events"].Where(e => (string)e["category_id"] == "103").ToList();
+
+                    Event add = new Event();
+                    for (int i = 0; i < EVENTS.Count; i++)
                     {
-                        returnEvents.Add(eventFromDB);
-                        continue;
+                        var eventFromDB = _context.Events.Where(e => e.EventbriteEventId.Equals((string)EVENTS[i]["id"])).FirstOrDefault();
+
+                        if (eventFromDB != null)
+                        {
+                            returnEvents.Add(eventFromDB);
+                            continue;
+                        }
+
+                        Event newEvent = new Event();
+
+                        newEvent.EventName = (string)EVENTS[i]["name"]["text"];
+                        newEvent.VenueId = (int)EVENTS[i]["venue"]["id"];
+                        newEvent.Latitude = (double)EVENTS[i]["venue"]["latitude"];
+                        newEvent.Longitude = (double)EVENTS[i]["venue"]["longitude"];
+                        newEvent.EventbriteEventId = (string)EVENTS[i]["id"];
+                        newEvent.Description = (string)EVENTS[i]["description"]["text"];
+                        newEvent.DateTime = (DateTime)EVENTS[i]["start"]["local"];
+
+                        returnEvents.Add(newEvent);
+
+                        if ((string)EVENTS[i]["subcategory_id"] == null)
+                        {
+                            newEvent.Genre = 3019;
+                        }
+                        else
+                        {
+                            newEvent.Genre = int.Parse((string)EVENTS[i]["subcategory_id"]);
+                        }
+
+                        await _context.Events.AddAsync(newEvent);
                     }
-
-                    Event newEvent = new Event();
-
-                    newEvent.EventName = (string)EVENTS[i]["name"]["text"];
-                    newEvent.VenueId = (int)EVENTS[i]["venue"]["id"];
-                    newEvent.Latitude = (double)EVENTS[i]["venue"]["latitude"];
-                    newEvent.Longitude = (double)EVENTS[i]["venue"]["longitude"];
-                    newEvent.EventbriteEventId = (string)EVENTS[i]["id"];
-                    newEvent.Description = (string)EVENTS[i]["description"]["text"];
-                    newEvent.DateTime = (DateTime)EVENTS[i]["start"]["local"];
-
-                    returnEvents.Add(newEvent);
-
-                    if ((string)EVENTS[i]["subcategory_id"] == null)
-                    {
-                        newEvent.Genre = 3019;
-                    }
-                    else
-                    {
-                        newEvent.Genre = int.Parse((string)EVENTS[i]["subcategory_id"]);
-                    }
-
-                    await _context.Events.AddAsync(newEvent);
                 }
 
                 await _context.SaveChangesAsync();
@@ -103,7 +128,8 @@ namespace LiveTunes.MVC.Controllers
         [HttpPost]
         public async Task<List<Event>> Handoff([FromBody] Coordinate coordinate)
         {
-          return await GetEventsByCoordinates(coordinate);
+          //return await GetEventsByCoordinates(coordinate);
+            return await getEventsByDistance(coordinate, 30);
         }
 
         public IActionResult Index()
