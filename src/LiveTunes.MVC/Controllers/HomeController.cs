@@ -48,7 +48,16 @@ namespace LiveTunes.MVC.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            catch (Exception E)
+            {
+                return View();
+            }
+
+            return RedirectToAction("LikedEvents");
         }
 
         public async Task<ActionResult> LikedEvents(){
