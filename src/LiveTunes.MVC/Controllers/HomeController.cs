@@ -51,6 +51,10 @@ namespace LiveTunes.MVC.Controllers
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if(userId == null)
+                {
+                    return View();
+                }
             }
             catch (Exception E)
             {
