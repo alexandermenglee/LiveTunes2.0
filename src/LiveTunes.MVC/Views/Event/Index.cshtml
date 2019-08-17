@@ -5,10 +5,11 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>var coords = {};</script>
 
-
-< select class="genres">
+<select class="genres">
 </select>
+<input type="button" id="genresClick" value="Enter"/>
 
 <style>
     #eventList{
@@ -32,11 +33,14 @@
     x = navigator.geolocation;
     x.getCurrentPosition(success, failure);
     var events;
+    //var coords = {};
     function success(position) {
+        
         var coordinates = {
             longitude: position.coords.longitude,
             latitude: position.coords.latitude
         }
+        coords = coordinates;
             $.post({
                 url: 'Event/Handoff',
                 contentType: "application/json; charset=utf-8",
@@ -73,7 +77,22 @@
                 }
             });
 
-        function getEventsByGenre(genreId) {
+
+    }
+
+
+    function failure() {
+        alert("Could not retrieve location.");
+    }
+
+    function getEventsByGenre(genreId, coords) {
+          
+            $.post({
+                url: 'Event/EventByGenreHandoff/?genreId=' + genreId,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(coords),
+                dataType: "json",
+                success: function (recData) {
                     events = recData;
                     var eventList = document.getElementById("eventList");
                     console.log("Success" + recData);
@@ -95,17 +114,25 @@
                                             <h5 class="card-title">Time: </h5>\
                                             <h5 class="card-title">Genre:' + getGenre(recData[i].genre) + ' </h5>\
                                         </div>\
-                                        <a href="/event/details/'+ recData[i].eventId +'"><input type="button" value="Go"/></a>\
+                                        <a href="/event/details/'+ recData[i].eventId + '"><input type="button" value="Go"/></a>\
                                     </div>\
                                 </div>\
                             </div>';
 
                     }
-        }
+                },
+                failure: function() {
+                    console.log(genreId + " " + coords);
+                }
+            });
     }
 
+    var genreListVal = 0;
+    document.getElementsByClassName("genres")[0].onchange = function () {
+        genreListVal = this.value;
+    }
 
-    function failure() {
-        alert("Could not retrieve location.");
+    document.getElementById("genresClick").onclick = function () {
+        getEventsByGenre(genreListVal, coords);
     }
 </script>
