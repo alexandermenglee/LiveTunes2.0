@@ -17,9 +17,6 @@ using LiveTunes.MVC.Class;
 
 namespace LiveTunes.MVC.Controllers
 {
-
-
-
     public class EventController : Controller
     {
         private static HttpClient client;
@@ -54,6 +51,13 @@ namespace LiveTunes.MVC.Controllers
         {
             var sCoord = new Coordinates(double.Parse(coordinate.Latitude), double.Parse(coordinate.Longitude));
             return await _context.Events.Where(x => getDistance(sCoord, new Coordinates(x.Latitude, x.Longitude)) < d).ToListAsync();
+        }
+
+        public async Task<List<Event>> getEventsByGenre(Coordinate coordinate, int? musicCategoryId)
+        {
+            var events = await getEventsByDistance(coordinate, 30);
+
+            return events.Where(x=>x.Genre == musicCategoryId).ToList();
         }
 
         [HttpPost]
@@ -127,9 +131,16 @@ namespace LiveTunes.MVC.Controllers
 
         [HttpPost]
         public async Task<List<Event>> Handoff([FromBody] Coordinate coordinate)
+
         {
           //return await GetEventsByCoordinates(coordinate);
             return await getEventsByDistance(coordinate, 30);
+        }
+
+        [HttpPost]
+        public async Task<List<Event>> EventByGenreHandoff( [FromBody] Coordinate coordinate,[FromQuery] int? genreId)
+        {
+            return await getEventsByGenre(coordinate, genreId);
         }
 
         public IActionResult Index()
