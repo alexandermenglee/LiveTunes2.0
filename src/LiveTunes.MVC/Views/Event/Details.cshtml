@@ -1,41 +1,57 @@
 @model LiveTunes.MVC.Models.Event
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
 }
 <script>
         var EventId = @Model.EventId
 </script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-            crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous"></script>
 <script src="~/js/comment.js"></script>
 <script src="~/js/like.js"></script>
 <script src="~/js/Genre.js"></script>
 
 <div class="card">
-    <div class="card-header text-center">
-        @Model.EventName
-    </div>
-    <div class="card-body container">
-        <div class="row">
-            <div class="col-3">
-                <img />
-            </div>
-            <div class="col-6">
-                <h5 class="card-title">Name: @Model.EventName</h5>
-                <h5 class="card-title">Date: @Model.DateTime.ToString("dd.MM.yyyy")</h5>
-                <h5 class="card-title">Time: @Model.DateTime.ToString("HH:mm")</h5>
-                <h5 class="card-title">Genre: <span id="genre"></span></h5>
-                <h5 class="card-title">Description @Model.Description</h5>
-            </div>
-            <div class="col-3">
-                <!-- Map -->
-            </div>
-        </div>
-    </div>
+	<div class="card-header text-center">
+		@Model.EventName
+	</div>
+	<div class="card-body container">
+		<div class="row">
+			<div class="col-3">
+				<img />
+			</div>
+			<div class="col-6">
+				<h5 class="card-title">Name: @Model.EventName</h5>
+				<h5 class="card-title">Date: @Model.DateTime.ToString("dd.MM.yyyy")</h5>
+				<h5 class="card-title">Time: @Model.DateTime.ToString("HH:mm")</h5>
+				<h5 class="card-title">Genre: <span id="genre"></span></h5>
+				<h5 class="card-title">Description @Model.Description</h5>
+			</div>
+			<style>
 
-    <script>
+				/* Always set the map height explicitly to define the size of the div
+					* element that contains the map. */
+				#map {
+					height: 100%;
+					width: 100%;
+					margin: auto;
+				}
+				/* Optional: Makes the sample page fill the window. */
+				html, body {
+					height: 100%;
+					margin: 0;
+					padding: 0;
+				}
+			</style>
+			<div id="eventMap" class="col-3">
+
+			</div>
+		</div>
+	</div>
+
+	<script>
 genreList = [];
 function getGenreList() {
     $.ajax({
@@ -56,66 +72,82 @@ getGenreList();
 
 
         @*getGenre(@Model.Genre);*@
-    </script>
+	</script>
 
-    <div class="card-footer">
-        <form asp-controller="Event" asp-action="Like" asp-route-id="@Model.EventId" method="POST">
-            @if(Model.LikeCount == 0)
-            {
-                <button type="submit" class="btn btn-sm btn-secondary"><i class="fa fa-thumbs-up"></i> Do you want to be the first?</button>
-            }
-            else
-            {
-                if (Model.UserLiked)
-                {
-                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-thumbs-down"></i> Unlike (@Model.LikeCount)</button>
-                }
-                else {
-                    <button type="submit" class="btn btn-sm btn-outline-primary"><i class="fa fa-thumbs-up"></i> Like (@Model.LikeCount)</button>
-                }
-            }
-            <button type="submit" class="btn btn-sm btn-outline-secondary" disabled>@Model.CommentCount Comments</button>
-        </form> 
-    </div>
+	<div class="card-footer">
+		<form asp-controller="Event" asp-action="Like" asp-route-id="@Model.EventId" method="POST">
+			@if (Model.LikeCount == 0)
+			{
+				<button type="submit" class="btn btn-sm btn-secondary"><i class="fa fa-thumbs-up"></i> Do you want to be the first?</button>
+			}
+			else
+			{
+				if (Model.UserLiked)
+				{
+					<button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-thumbs-down"></i> Unlike (@Model.LikeCount)</button>
+				}
+				else
+				{
+					<button type="submit" class="btn btn-sm btn-outline-primary"><i class="fa fa-thumbs-up"></i> Like (@Model.LikeCount)</button>
+				}
+			}
+			<button type="submit" class="btn btn-sm btn-outline-secondary" disabled>@Model.CommentCount Comments</button>
+		</form>
+	</div>
 </div>
 
-@foreach (var item in Model.Comments) {
-    <div class="card col-8 border-secondary" style="width: 100%; margin: auto; margin-top: 10px;">
-        <div class="card-body" style="padding: 5px;">
-            <p class="card-text text-muted">@Html.DisplayFor(modelItem => item.DateTime) - @ViewBag.UserFirstName @ViewBag.UserLastName</p>
-            <p class="card-text shadow" style="padding: 3px; border-radius: 5px; margin-bottom: 5px;">@Html.DisplayFor(modelItem => item.CommentText)</p>
-            <!-- Will be worked on later -->
-            <!-- <p class="card-text">@Html.ActionLink("Delete", "Delete", new {})</p> -->
-        </div>
-    </div>
+@foreach (var item in Model.Comments)
+{
+	<div class="card col-8 border-secondary" style="width: 100%; margin: auto; margin-top: 10px;">
+		<div class="card-body" style="padding: 5px;">
+			<p class="card-text text-muted">@Html.DisplayFor(modelItem => item.DateTime) - @ViewBag.UserFirstName @ViewBag.UserLastName</p>
+			<p class="card-text shadow" style="padding: 3px; border-radius: 5px; margin-bottom: 5px;">@Html.DisplayFor(modelItem => item.CommentText)</p>
+			<!-- Will be worked on later -->
+			<!-- <p class="card-text">@Html.ActionLink("Delete", "Delete", new {})</p> -->
+		</div>
+	</div>
 }
 
 <div class="row" style="width: 100%;">
-    <div class="col-md-6" style="width: 100%; margin: auto;">
-        <form asp-action="Comment" asp-controller="Event" asp-route-id="@Model.EventId" method="POST" style="text-align: center;">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label class="control-label"></label>
-                <input name="commentText" class="form-control" />
-                <span class="text-danger"></span>
-            </div>
-            <div class="form-group" style="width: auto; margin: auto;">
-                <input type="submit" value="Comment" class="btn btn-primary"/>
-            </div>
-        </form>
-    </div>
+	<div class="col-md-6" style="width: 100%; margin: auto;">
+		<form asp-action="Comment" asp-controller="Event" asp-route-id="@Model.EventId" method="POST" style="text-align: center;">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label class="control-label"></label>
+				<input name="commentText" class="form-control" />
+				<span class="text-danger"></span>
+			</div>
+			<div class="form-group" style="width: auto; margin: auto;">
+				<input type="submit" value="Comment" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
 </div>
 
-<!-- <form asp-controller="Event" asp-action="Like" asp-route-id="@Model.EventId" method="POST">
-            <button type="submit" class="btn btn-md btn-outline-primary">Comment</button>
-        </form>  -->
+<script>
+	// Initialize and add the map
+	function initMap() {
+		// The location of event
+		var eventLocation = { lat: @Model.Latitude, lng: @Model.Longitude };
+		// The map, centered at eventLocation
+		var map = new google.maps.Map(
+			document.getElementById('eventMap'), { zoom: 15, center: eventLocation });
+		// The marker, positioned at the specific event location
+		var marker = new google.maps.Marker({ position: eventLocation, map: map });
+	}
+</script>
 
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap"
+		type="text/javascript"></script>
+
+<!-- <form asp-controller="Event" asp-action="Like" asp-route-id="@Model.EventId" method="POST">
+			<button type="submit" class="btn btn-md btn-outline-primary">Comment</button>
+		</form>  -->
 <!-- <div>
-    <h1 id="comments"></h1>
+	<h1 id="comments"></h1>
 </div>
 <input id="comment" type="textarea" onchange="updateComment()"/>
 <input onclick=addComment() type="button" value="Add Comment" style="text-align: center; width: 100%; background-color: green"/> -->
-
 <!-- <script>
-    getComments(@Model.EventId);
+	getComments(@Model.EventId);
 </script> -->
