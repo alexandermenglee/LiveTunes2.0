@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LiveTunes.MVC.Data;
 using LiveTunes.MVC.Models;
+using LiveTunes.MVC.ViewModels;
+using Newtonsoft.Json;
 
 namespace LiveTunes.MVC.Controllers
 {
@@ -160,5 +162,28 @@ namespace LiveTunes.MVC.Controllers
 		//**********************************************************
 		//D3 Graph method
 
-    }
+		public IActionResult BarGraph(int venueId)
+		{
+			return View();
+		}
+
+		public string CreateGraph(int id)
+		{
+			List<EventUserEngagement> aggregateEventWithHitsList = new List<EventUserEngagement>();
+
+			var foundEvents = _context.Events.Where(e => Convert.ToInt32(e.VenueId) == id).ToList();
+			foreach (var item in foundEvents)
+			{
+				EventUserEngagement eventsWithHits = new EventUserEngagement();
+				var totalUserEngagement = 0;
+				totalUserEngagement = item.LikeCount + item.CommentCount;
+				eventsWithHits.EventName = item.EventName;
+				eventsWithHits.EventDate = item.DateTime;
+				eventsWithHits.UserEngagement = totalUserEngagement;
+				aggregateEventWithHitsList.Add(eventsWithHits);
+			}
+			return JsonConvert.SerializeObject(aggregateEventWithHitsList);
+		}
+
+	}
 }
