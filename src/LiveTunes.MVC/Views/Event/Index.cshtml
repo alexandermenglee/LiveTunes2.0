@@ -5,10 +5,11 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=@GoogleMapsAPIToken.Token&callback=initMap" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-
+<script>var coords = {};</script>
 
 <select class="genres">
 </select>
+<input type="button" id="genresClick" value="Enter"/>
 
 <style>
     #eventList{
@@ -32,11 +33,14 @@
     x = navigator.geolocation;
     x.getCurrentPosition(success, failure);
     var events;
+    //var coords = {};
     function success(position) {
+        
         var coordinates = {
             longitude: position.coords.longitude,
             latitude: position.coords.latitude
         }
+        coords = coordinates;
             $.post({
                 url: 'Event/Handoff',
                 contentType: "application/json; charset=utf-8",
@@ -46,6 +50,7 @@
                     events = recData;
                     var eventList = document.getElementById("eventList");
                     console.log("Success" + recData);
+                    eventList.innerHTML = "";
                     for (let i = 0; i < recData.length; i++) {
                         console.log(recData[i]);
                         eventList.innerHTML += '<div class="card">\
@@ -71,10 +76,63 @@
                     }
                 }
             });
+
+
     }
 
 
     function failure() {
         alert("Could not retrieve location.");
+    }
+
+    function getEventsByGenre(genreId, coords) {
+          
+            $.post({
+                url: 'Event/EventByGenreHandoff/?genreId=' + genreId,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(coords),
+                dataType: "json",
+                success: function (recData) {
+                    events = recData;
+                    var eventList = document.getElementById("eventList");
+                    console.log("Success" + recData);
+                    eventList.innerHTML = "";
+                    for (let i = 0; i < recData.length; i++) {
+                        console.log(recData[i]);
+                        eventList.innerHTML += '<div class="card">\
+                                <div class="card-header">\
+                                    ' + recData[i].eventName + '\
+                                </div>\
+                                <div class="card-body container">\
+                                    <div class="row">\
+                                        <div class="col-3">\
+                                            <img />\
+                                        </div>\
+                                        <div class="col-9">\
+                                            <h5 class="card-title">Name: </h5>\
+                                            <h5 class="card-title">Date:' + recData[i].dateTime + ' </h5>\
+                                            <h5 class="card-title">Time: </h5>\
+                                            <h5 class="card-title">Genre:' + getGenre(recData[i].genre) + ' </h5>\
+                                        </div>\
+                                        <a href="/event/details/'+ recData[i].eventId + '"><input type="button" value="Go"/></a>\
+                                    </div>\
+                                </div>\
+                            </div>';
+
+                    }
+                },
+                failure: function() {
+                    console.log(genreId + " " + coords);
+                }
+            });
+    }
+
+    var genreListVal = 0;
+    document.getElementsByClassName("genres")[0].onchange = function () {
+        genreListVal = this.value;
+    }
+
+    document.getElementById("genresClick").onclick = function () {
+        getEventsByGenre(genreListVal, coords);
     }
 </script>

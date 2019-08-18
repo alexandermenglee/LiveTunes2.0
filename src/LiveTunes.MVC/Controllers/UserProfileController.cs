@@ -58,7 +58,7 @@ namespace LiveTunes.MVC.Controllers
             _context.UserProfiles.Add(newUserProfile);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Create", "Survey");
+            return RedirectToAction("Create", "Survey"); 
         }
 
         // GET: UserProfile/Edit/5
