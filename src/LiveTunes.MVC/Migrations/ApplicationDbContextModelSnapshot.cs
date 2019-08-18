@@ -4,16 +4,14 @@ using LiveTunes.MVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LiveTunes.MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190816023720_Changed EventbriteId to String")]
-    partial class ChangedEventbriteIdtoString
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,7 +100,7 @@ namespace LiveTunes.MVC.Migrations
 
                     b.Property<string>("EventbriteEventId");
 
-                    b.Property<string>("Genre");
+                    b.Property<int?>("Genre");
 
                     b.Property<double>("Latitude");
 
