@@ -3,7 +3,7 @@ function getComments(EventId) {
     var comments = [];
     $.ajax({
         type: "GET",
-        url: "https://localhost:44303/comment/List/" + EventId,
+        url: "/comment/List/" + EventId,
         success: function (data) {
             console.log("got a response");
             comments = data;
@@ -24,7 +24,7 @@ function updateComment() {
 function addComment() {
     $.ajax({
         type: "GET",
-        url: "https://localhost:5001/comment/Create/?EventId=" + EventId + "&text=" + text,
+        url: "/comment/Create/?EventId=" + EventId + "&text=" + text,
         success: function (data) {
             console.log("works");
         },

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LiveTunes.MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190816144759_Init")]
-    partial class Init
+    [Migration("20190818011752_TestingUserEngagement")]
+    partial class TestingUserEngagement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -178,11 +178,11 @@ namespace LiveTunes.MVC.Migrations
 
                     b.Property<string>("ArtistName");
 
-                    b.Property<string>("FavoriteGenre1");
+                    b.Property<int>("FavoriteGenre1");
 
-                    b.Property<string>("FavoriteGenre2");
+                    b.Property<int>("FavoriteGenre2");
 
-                    b.Property<string>("FavoriteGenre3");
+                    b.Property<int>("FavoriteGenre3");
 
                     b.Property<int>("UserId");
 

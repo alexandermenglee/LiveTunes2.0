@@ -32,9 +32,15 @@ namespace LiveTunes.MVC.Controllers
         // GET: UserProfile/Create
         public ActionResult Create()
         {
-            //UserProfile add = new UserProfile();
-            
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var newUserProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+
+            if (newUserProfile == null)
+            {
+                return RedirectToAction("Create", "UserProfile");
+            }
+
+            return RedirectToAction("Create", "Survey");
         }
 
         // POST: UserProfile/Create
@@ -42,14 +48,17 @@ namespace LiveTunes.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(UserProfile profile)
         {
-            UserProfile add = new UserProfile();
-            add.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            add.FirstName = profile.FirstName;
-            add.LastName = profile.LastName;
-            _context.UserProfiles.Add(add);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var newUserProfile = new UserProfile();
+                
+            newUserProfile.UserId = userId;
+            newUserProfile.FirstName = profile.FirstName;
+            newUserProfile.LastName = profile.LastName;
+
+            _context.UserProfiles.Add(newUserProfile);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index)); ;
+            return RedirectToAction("Create", "Survey"); 
         }
 
         // GET: UserProfile/Edit/5
