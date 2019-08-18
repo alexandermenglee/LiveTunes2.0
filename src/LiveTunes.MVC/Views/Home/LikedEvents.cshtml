@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<LiveTunes.MVC.Models.Event>
-
+<script src="~/js/Genre.js"></script>
 @{
     ViewData["Title"] = "LikedEvents";
 }
@@ -9,25 +9,56 @@
 <table class="table">
 
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                You Liked
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
-                <a href="/Event/Details/@item.EventId">Go</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            if (item.UserLiked)
+            {
+                <tr>
+                    <td>
+                        You Liked
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateTime)
+                    </td>
+                    <td>
+                        <a href="/Event/Details/@item.EventId">Go</a>
+                    </td>
+                </tr>
+            }
+
+        }
     </tbody>
 </table>
+
+<h2>Recommended Events</h2>
+
+<table class="table">   
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (!item.UserLiked)
+            {
+                <tr>
+                    <td>
+                        Recommended
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateTime)
+                    </td>
+                    <td>
+                        <a href="/Event/Details/@item.EventId">Go</a>
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
+   
 <a href="/Event">Find More Events!</a>

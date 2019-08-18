@@ -77,6 +77,22 @@ namespace LiveTunes.MVC.Controllers
                 events.Add(_context.Events.Where(x => x.EventId == like.EventId).FirstOrDefault());
             }
 
+            foreach(Event e in events){
+                e.UserLiked = true;
+            }
+
+            var surveyResults = _context.Surveys.Where(x => x.UserId == userProfileId).FirstOrDefault();
+            var recommendedEvents = await _context.Events.Where(x => (x.Genre == surveyResults.FavoriteGenre1 || x.Genre == surveyResults.FavoriteGenre2 || x.Genre == surveyResults.FavoriteGenre3)).ToListAsync();
+
+            foreach(var e in recommendedEvents){
+                events.Add(e);
+            }
+            //for (int i=0; i < surveyResults.Count; i++)
+            //{
+                
+            //}
+            
+        
             return View(events);
         }
 
