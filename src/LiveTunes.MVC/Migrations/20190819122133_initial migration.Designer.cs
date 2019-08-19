@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LiveTunes.MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190818163840_Init")]
-    partial class Init
+    [Migration("20190819122133_initial migration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

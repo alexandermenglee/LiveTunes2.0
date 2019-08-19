@@ -10,6 +10,7 @@ using LiveTunes.MVC.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace LiveTunes.MVC.Controllers
@@ -65,6 +66,19 @@ namespace LiveTunes.MVC.Controllers
             return musicPreferenceData.ToList();
         }
 
+        [HttpGet]
+        public Survey GetSurveyData()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault();
+            var survey = _context.Surveys.Where(s => s.UserId == userProfileId.UserProfileId).Single();
+
+            /*var xxxx = JsonConvert.SerializeObject(survey);*/
+
+            return survey;
+            
+        }
+
         public ActionResult SongSamples()
         {
             return View();
@@ -75,6 +89,10 @@ namespace LiveTunes.MVC.Controllers
         [HttpPost]
         public async Task Like([FromBody] MusicPreference likedSong)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.Where(u => u.UserId.Equals(userId)).Single();
+            likedSong.UserId = userProfile.UserProfileId;
+
             await _context.MusicPreferences.AddAsync(likedSong);
             await _context.SaveChangesAsync();
         }

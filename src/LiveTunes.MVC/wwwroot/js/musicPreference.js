@@ -6,7 +6,17 @@
     });
 }
 
-function getSuggestedSong() {
+function getSurveyData() {
+    $.ajax({
+        dataType: "json",
+        url: "/MusicPreference/GetSurveyData",
+        method: "get",
+        success: data => console.log(data),
+        error: error => console.log(error)
+    });
+}
+
+function getSuggestedSongs() {
     let endpoint = "https://itunes.apple.com/search?term=hip+hop";
     $.ajax({
         dataType: "jsonp",
@@ -66,4 +76,4 @@ function displayRecommendedSongs(songs) {
     }
 }
 
-getSuggestedSong();
+getSurveyData();
