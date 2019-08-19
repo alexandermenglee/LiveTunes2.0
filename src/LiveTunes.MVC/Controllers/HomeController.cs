@@ -46,11 +46,30 @@ namespace LiveTunes.MVC.Controllers
 			// 	transaction.Commit();
 			// }
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.Name);
+
+            if (userId == null)
+            {
+                return LocalRedirect("~/Identity/Account/Login");
+            }
+
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
+            var survey = await _context.Surveys.FirstOrDefaultAsync(x => x.UserId == userProfile.UserProfileId);
+            
+            if (userProfile == null)
+            {
+                return RedirectToAction("Create", "UserProfile");
+            }
+
+            if (survey == null)
+            {
+                return RedirectToAction("Create", "Survey");
+            }
+
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(userId == null)
                 {
                     return View();
