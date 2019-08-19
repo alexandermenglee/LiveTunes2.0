@@ -40,13 +40,14 @@
             longitude: position.coords.longitude,
             latitude: position.coords.latitude
         }
-        coords = coordinates;
+		coords = coordinates;
+		console.log(coordinates);
             $.post({
                 url: 'Event/Handoff',
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(coordinates),
                 dataType: "json",
-                success: function (recData) {
+				success: function (recData) {
                     events = recData;
                     var eventList = document.getElementById("eventList");
                     console.log("Success" + recData);
