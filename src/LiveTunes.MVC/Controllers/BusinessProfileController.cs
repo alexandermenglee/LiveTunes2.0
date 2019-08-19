@@ -26,7 +26,7 @@ namespace LiveTunes.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.BusinessProfiles.Include(b => b.User);
-			SeedDatabase();
+			SeedTestEvents();
 			return View(await applicationDbContext.ToListAsync());
         }
 
@@ -196,12 +196,13 @@ namespace LiveTunes.MVC.Controllers
 
 			return JsonConvert.SerializeObject(aggregateEventWithHitsList);
 		}
-
-		public void SeedDatabase()
+        
+		public void SeedTestEvents()
 		{
-			var eventCount = _context.Events.Count();
+			var venueId = 12345678;
+			var foundEvents = _context.Events.Where(e => e.VenueId == venueId).Count();
 			var totalEvents = 5;
-			if (eventCount == 0)
+			if (foundEvents == 0)
 			{
 				for (int i = 0; i < totalEvents; i++)
 				{
