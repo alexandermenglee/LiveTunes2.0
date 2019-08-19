@@ -6,24 +6,75 @@
     });
 }
 
+let recommendedSongs = [];
+
+function genreStringManipulator(genre) {
+    if (genre.includes("/")){
+        let indexOfBackslash = genre.indexOf("/");
+        genre = genre.substring(0, indexOfBackslash).trim().replace(" ", "+");
+        return genre;
+    }
+
+    if (genre.includes("&")) {
+        let indexOfBackslash = genre.indexOf("&");
+        genre = genre.substring(0, indexOfBackslash).trim().replace(" ", "+");
+        return genre;
+    }
+
+    return genre;
+}
+
 function getSurveyData() {
     $.ajax({
         dataType: "json",
         url: "/MusicPreference/GetSurveyData",
         method: "get",
-        success: data => console.log(data),
+        success: data => {
+            getSongsByGenre1(data);
+        },
         error: error => console.log(error)
     });
 }
 
-function getSuggestedSongs() {
-    let endpoint = "https://itunes.apple.com/search?term=hip+hop";
+function getSongsByGenre1(genres) {
+    let endpoint = "https://itunes.apple.com/search?term=" + genreStringManipulator(genres.genre1) + "&limit=1";  
     $.ajax({
         dataType: "jsonp",
         method: "get",
         url: endpoint,
         success: data => {
-            displayRecommendedSongs(data.results);
+            recommendedSongs.push(data.results[0]);
+            getSongsByGenre2(genres);
+        },
+        error: error => console.log(error)
+    });
+}
+
+function getSongsByGenre2(genres) {
+    let endpoint = "https://itunes.apple.com/search?term=" + genreStringManipulator(genres.genre2) + "&limit=1";
+    $.ajax({
+        dataType: "jsonp",
+        method: "get",
+        url: endpoint,
+        success: data => {
+            recommendedSongs.push(data.results[0]);
+            getSongsByGenre3(genres);
+        },
+        error: error => console.log(error)
+    });
+}
+
+function getSongsByGenre3(genres) {
+    let endpoint = "https://itunes.apple.com/search?term=" + genreStringManipulator(genres.genre3) + "&limit=1";
+    $.ajax({
+        dataType: "jsonp",
+        method: "get",
+        url: endpoint,
+        success: data => {
+            console.log(data);
+            recommendedSongs.push(data.results[0]);
+            console.log(recommendedSongs);
+            displayRecommendedSongs(recommendedSongs);
         },
         error: error => console.log(error)
     });
@@ -57,6 +108,7 @@ function displayRecommendedSongs(songs) {
         let likeButton = document.createElement("button");
         likeButton.innerHTML = "Like";
         $(likeButton).click(() => {
+            console.log(song);
             $.post({
                 url: "Like",
                 data: JSON.stringify(song),

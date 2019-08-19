@@ -70,15 +70,23 @@ namespace LiveTunes.MVC.Controllers
         }
 
         [HttpGet]
-        public Survey GetSurveyData()
+        public string GetSurveyData()
         {
+            Dictionary<string, string> genres = new Dictionary<string, string>();
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault();
             var survey = _context.Surveys.Where(s => s.UserId == userProfileId.UserProfileId).Single();
+            var genre1 = _context.MusicCategories.Where(m => m.Id == survey.FavoriteGenre1).Single().CategoryName;
+            var genre2 = _context.MusicCategories.Where(m => m.Id == survey.FavoriteGenre2).Single().CategoryName;
+            var genre3 = _context.MusicCategories.Where(m => m.Id == survey.FavoriteGenre3).Single().CategoryName;
 
-            /*var xxxx = JsonConvert.SerializeObject(survey);*/
+            genres.Add("artistName", survey.ArtistName);
+            genres.Add("genre1", genre1);
+            genres.Add("genre2", genre2);
+            genres.Add("genre3", genre3);
 
-            return survey;
+            return JsonConvert.SerializeObject(genres);
             
         }
 
