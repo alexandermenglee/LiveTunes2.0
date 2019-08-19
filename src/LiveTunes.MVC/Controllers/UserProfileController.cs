@@ -92,6 +92,5 @@ namespace LiveTunes.MVC.Controllers
         }
 
         // POST: UserProfile/Delete/5
-        
     }
 }
