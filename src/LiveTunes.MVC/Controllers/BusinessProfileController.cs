@@ -167,6 +167,25 @@ namespace LiveTunes.MVC.Controllers
 			return View();
 		}
 
+		//public string CreateGraph(int id)
+		//{
+		//	List<EventUserEngagement> aggregateEventWithHitsList = new List<EventUserEngagement>();
+
+		//	var foundEvents = _context.Events.Where(e => Convert.ToInt32(e.VenueId) == id).ToList();
+		//	foreach (var item in foundEvents)
+		//	{
+		//		EventUserEngagement eventsWithHits = new EventUserEngagement();
+		//		var totalUserEngagement = 0;
+		//		totalUserEngagement = item.LikeCount + item.CommentCount;
+		//		eventsWithHits.EventName = item.EventName;
+		//		eventsWithHits.EventDate = item.DateTime;
+		//		eventsWithHits.UserEngagement = totalUserEngagement;
+		//		aggregateEventWithHitsList.Add(eventsWithHits);
+		//	}
+		//	return JsonConvert.SerializeObject(aggregateEventWithHitsList);
+		//}
+
+
 		public string CreateGraph(int id)
 		{
 			List<EventUserEngagement> aggregateEventWithHitsList = new List<EventUserEngagement>();
@@ -175,8 +194,10 @@ namespace LiveTunes.MVC.Controllers
 			foreach (var item in foundEvents)
 			{
 				EventUserEngagement eventsWithHits = new EventUserEngagement();
+				var totalLikes = _context.Likes.Where(e => e.EventId == item.EventId).Count();
+				var totalComments = _context.Comments.Where(e => e.EventId == item.EventId).Count();
 				var totalUserEngagement = 0;
-				totalUserEngagement = item.LikeCount + item.CommentCount;
+				totalUserEngagement = totalLikes + totalComments;
 				eventsWithHits.EventName = item.EventName;
 				eventsWithHits.EventDate = item.DateTime;
 				eventsWithHits.UserEngagement = totalUserEngagement;
