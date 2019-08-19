@@ -7,6 +7,7 @@ using LiveTunes.MVC.Data;
 using LiveTunes.MVC.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LiveTunes.MVC.Controllers
 {
@@ -17,10 +18,30 @@ namespace LiveTunes.MVC.Controllers
         {
             _context = context;
         }
+
+        public IActionResult Profile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+
+            if (userProfile == null)
+            {
+                return RedirectToAction("Create","UserProfile");
+                
+            }
+            else
+            {
+                return RedirectToAction("Index", new { id = userProfile.UserProfileId });
+            }
+        }
+
         // GET: UserProfile
         public ActionResult Index()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+            
+            return View(userProfile);
         }
 
         // GET: UserProfile/Details/5
@@ -62,9 +83,23 @@ namespace LiveTunes.MVC.Controllers
         }
 
         // GET: UserProfile/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserProfileId == id && x.UserId == userId);
+
+            if (userProfile == null)
+            {
+                return NotFound();
+            }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userProfile.UserId);
+            
+            return View(userProfile);
         }
 
         // POST: UserProfile/Edit/5
@@ -92,6 +127,5 @@ namespace LiveTunes.MVC.Controllers
         }
 
         // POST: UserProfile/Delete/5
-        
     }
 }

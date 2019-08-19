@@ -31,6 +31,7 @@ namespace LiveTunes.MVC.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
             var surveyList = _context.Surveys.Where(x => x.UserId == userProfile.UserProfileId).ToList();
+            
             return View(surveyList);
         }
         

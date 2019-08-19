@@ -45,10 +45,11 @@ namespace LiveTunes.MVC.Controllers
 			//	a.Database.ExecuteSqlCommand("SET IDENTITY_INSERT MusicCategories OFF");
 			//	transaction.Commit();
 			//}
-		}
+        }
+
         public async Task<IActionResult> Index()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 			if (userId == null)
             {
@@ -75,7 +76,7 @@ namespace LiveTunes.MVC.Controllers
                     return View();
                 }
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 return View();
             }
@@ -88,8 +89,8 @@ namespace LiveTunes.MVC.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault().UserProfileId;
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
-
             var likes = _context.Likes.Where(x => x.UserId == userProfileId);
+
             List<Event> events = new List<Event>();
 
             foreach (var like in likes)
@@ -109,11 +110,11 @@ namespace LiveTunes.MVC.Controllers
             {
                 events.Add(e);
             }
+
             //for (int i=0; i < surveyResults.Count; i++)
             //{
 
             //}
-
 
             return View(events);
         }

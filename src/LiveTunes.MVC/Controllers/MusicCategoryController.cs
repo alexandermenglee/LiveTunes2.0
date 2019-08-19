@@ -16,6 +16,7 @@ namespace LiveTunes.MVC.Controllers
         {
             _context = context;
         }
+
         // GET: MusicCategory
         public ActionResult Index()
         {
@@ -34,7 +35,6 @@ namespace LiveTunes.MVC.Controllers
             return View();
         }
 
-
         public async Task<List<MusicCategory>> List()
         {
             return _context.MusicCategories.Where(x => true).ToList();
@@ -48,7 +48,6 @@ namespace LiveTunes.MVC.Controllers
             try
             {
                 // TODO: Add insert logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -71,7 +70,6 @@ namespace LiveTunes.MVC.Controllers
             try
             {
                 // TODO: Add update logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -94,7 +92,6 @@ namespace LiveTunes.MVC.Controllers
             try
             {
                 // TODO: Add delete logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch
