@@ -35,12 +35,12 @@ namespace LiveTunes.MVC.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var newUserProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
 
-            if (newUserProfile == null)
+            if (newUserProfile != null)
             {
-                return RedirectToAction("Create", "UserProfile");
+                return RedirectToAction("Create", "Survey");
             }
 
-            return RedirectToAction("Create", "Survey");
+            return View();
         }
 
         // POST: UserProfile/Create
