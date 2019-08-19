@@ -13,7 +13,7 @@ namespace LiveTunes.MVC.Models
         [Display(Name = "Artist Name")]
         public string ArtistName { get; set; }
         [Display(Name = "Song Name")]
-        public string SongName { get; set; }
+        public string SongName { get; set; }    
         [Display(Name = "Genre")]
         public string Genre { get; set; }
     }

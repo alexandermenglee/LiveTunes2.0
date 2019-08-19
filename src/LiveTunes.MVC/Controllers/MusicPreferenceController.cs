@@ -10,6 +10,7 @@ using LiveTunes.MVC.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace LiveTunes.MVC.Controllers
@@ -68,9 +69,33 @@ namespace LiveTunes.MVC.Controllers
             return musicPreferenceData.ToList();
         }
 
+        [HttpGet]
+        public string GetSurveyData()
+        {
+            Dictionary<string, string> genres = new Dictionary<string, string>();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault();
+            var survey = _context.Surveys.Where(s => s.UserId == userProfileId.UserProfileId).Single();
+            var genre1 = _context.MusicCategories.Where(m => m.Id == survey.FavoriteGenre1).Single().CategoryName;
+            var genre2 = _context.MusicCategories.Where(m => m.Id == survey.FavoriteGenre2).Single().CategoryName;
+            var genre3 = _context.MusicCategories.Where(m => m.Id == survey.FavoriteGenre3).Single().CategoryName;
+
+            genres.Add("artistName", survey.ArtistName);
+            genres.Add("genre1", genre1);
+            genres.Add("genre2", genre2);
+            genres.Add("genre3", genre3);
+
+            return JsonConvert.SerializeObject(genres);
+            
+        }
+
         public ActionResult SongSamples()
         {
-            return View();
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault();
+			var survey = _context.Surveys.Where(s => s.UserId == userProfileId.UserProfileId).Single();
+			return View();
         }
 
         //Will write Some Jquery to go along with this
@@ -78,6 +103,10 @@ namespace LiveTunes.MVC.Controllers
         [HttpPost]
         public async Task Like([FromBody] MusicPreference likedSong)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.Where(u => u.UserId.Equals(userId)).Single();
+            likedSong.UserId = userProfile.UserProfileId;
+
             await _context.MusicPreferences.AddAsync(likedSong);
             await _context.SaveChangesAsync();
         }

@@ -24,6 +24,7 @@ namespace LiveTunes.MVC.Models
         [Display(Name = "Genre")]
         public int? Genre { get; set; }
         public string Description{ get; set; }
+        public string ImageUrl { get; set; }
         public string EventbriteEventId { get; set; }
         [NotMapped]
         public int LikeCount { get; set; }
