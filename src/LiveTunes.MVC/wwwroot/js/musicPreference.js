@@ -106,6 +106,8 @@ function displayRecommendedSongs(songs) {
         artistName.textContent = songs[i].artistName;
 
         let likeButton = document.createElement("button");
+        likeButton.classList.add("btn");
+        likeButton.classList.add("btn-secondary");
         likeButton.innerHTML = "Like";
         $(likeButton).click(() => {
             console.log(song);
@@ -119,12 +121,17 @@ function displayRecommendedSongs(songs) {
             });
         });
 
+        let emptyDiv = document.createElement("div");
+
+        emptyDiv.setAttribute("style", "display: inline-block;");
+        likeButton.setAttribute("style", "display: block; margin-bottom: 5px;");
         resultsDiv.append(songDiv);
         resultsDiv.append(albumArt);
         resultsDiv.append(trackName);
         resultsDiv.append(artistName);
-        resultsDiv.append(songSample);
-        resultsDiv.append(likeButton);
+        resultsDiv.append(emptyDiv);
+        emptyDiv.append(songSample);
+        emptyDiv.append(likeButton);
     }
 }
 

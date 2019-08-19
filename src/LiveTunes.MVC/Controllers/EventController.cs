@@ -134,7 +134,7 @@ namespace LiveTunes.MVC.Controllers
         public async Task<List<Event>> Handoff([FromBody] Coordinate coordinate)
         {
             // return await GetEventsByCoordinates(coordinate);
-            return await getEventsByDistance(coordinate, 30);
+            return await getEventsByDistance(coordinate, 25);
         }
 
         [HttpPost]
