@@ -7,7 +7,8 @@
 ////using Microsoft.EntityFrameworkCore.Migrations;
 ////using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-//<<<<<<< HEAD:src/LiveTunes.MVC/Migrations/20190817200950_MusicCategorySurveyint.Designer.cs
+
+
 ////namespace LiveTunes.MVC.Migrations
 ////{
 ////    [DbContext(typeof(ApplicationDbContext))]
@@ -35,7 +36,7 @@
 //                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
 //                .HasAnnotation("Relational:MaxIdentifierLength", 128)
 //                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-//>>>>>>> 80a01d0cb1acadd1b3ae94044d484ebd0ff49df7:src/LiveTunes.MVC/Migrations/20190818163840_Init.Designer.cs
+
 
 ////            modelBuilder.Entity("LiveTunes.MVC.Models.Address", b =>
 ////                {

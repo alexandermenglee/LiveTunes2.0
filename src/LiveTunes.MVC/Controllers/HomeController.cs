@@ -17,7 +17,6 @@ namespace LiveTunes.MVC.Controllers
         public HomeController(ApplicationDbContext a)
         {
             _context = a;
-
             //using (var transaction = a.Database.BeginTransaction())
             //{
             //    a.MusicCategories.Add(new Models.MusicCategory(3001, "Alternative"));
@@ -49,7 +48,7 @@ namespace LiveTunes.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 			if (userId == null)
             {

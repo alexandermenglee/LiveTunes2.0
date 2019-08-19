@@ -1,3 +1,4 @@
+
 ﻿//using System;
 //using Microsoft.EntityFrameworkCore.Metadata;
 //using Microsoft.EntityFrameworkCore.Migrations;
@@ -483,9 +484,3 @@
 
 //            migrationBuilder.DropTable(
 //                name: "User Profile");
-
-//            migrationBuilder.DropTable(
-//                name: "AspNetUsers");
-//        }
-//    }
-//}
