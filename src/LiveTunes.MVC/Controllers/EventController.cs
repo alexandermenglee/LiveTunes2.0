@@ -95,6 +95,7 @@ namespace LiveTunes.MVC.Controllers
                         newEvent.EventbriteEventId = (string)EVENTS[i]["id"];
                         newEvent.Description = (string)EVENTS[i]["description"]["text"];
                         newEvent.DateTime = (DateTime)EVENTS[i]["start"]["local"];
+                        newEvent.Venue = (string)EVENTS[i]["venue"]["name"];
 
                         returnEvents.Add(newEvent);
 
@@ -122,7 +123,7 @@ namespace LiveTunes.MVC.Controllers
         [HttpPost]
         public async Task<List<Event>> Handoff([FromBody] Coordinate coordinate)
         {
-            //return await GetEventsByCoordinates(coordinate);
+            // return await GetEventsByCoordinates(coordinate);
             return await getEventsByDistance(coordinate, 30);
         }
 
