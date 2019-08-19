@@ -10,8 +10,8 @@
 //namespace LiveTunes.MVC.Migrations
 //{
 //    [DbContext(typeof(ApplicationDbContext))]
-//    [Migration("20190817165957_changeSurvey")]
-//    partial class changeSurvey
+//    [Migration("20190819051618_Updates")]
+//    partial class Updates
 //    {
 //        protected override void BuildTargetModel(ModelBuilder modelBuilder)
 //        {
@@ -178,21 +178,15 @@
 
 //                    b.Property<string>("ArtistName");
 
-//                    b.Property<int?>("FavoriteGenre1Id");
+//                    b.Property<int>("FavoriteGenre1");
 
-//                    b.Property<int?>("FavoriteGenre2Id");
+//                    b.Property<int>("FavoriteGenre2");
 
-//                    b.Property<int?>("FavoriteGenre3Id");
+//                    b.Property<int>("FavoriteGenre3");
 
 //                    b.Property<int>("UserId");
 
 //                    b.HasKey("SurverId");
-
-//                    b.HasIndex("FavoriteGenre1Id");
-
-//                    b.HasIndex("FavoriteGenre2Id");
-
-//                    b.HasIndex("FavoriteGenre3Id");
 
 //                    b.HasIndex("UserId");
 
@@ -434,18 +428,6 @@
 
 //            modelBuilder.Entity("LiveTunes.MVC.Models.Survey", b =>
 //                {
-//                    b.HasOne("LiveTunes.MVC.Models.MusicCategory", "FavoriteGenre1")
-//                        .WithMany()
-//                        .HasForeignKey("FavoriteGenre1Id");
-
-//                    b.HasOne("LiveTunes.MVC.Models.MusicCategory", "FavoriteGenre2")
-//                        .WithMany()
-//                        .HasForeignKey("FavoriteGenre2Id");
-
-//                    b.HasOne("LiveTunes.MVC.Models.MusicCategory", "FavoriteGenre3")
-//                        .WithMany()
-//                        .HasForeignKey("FavoriteGenre3Id");
-
 //                    b.HasOne("LiveTunes.MVC.Models.UserProfile", "User")
 //                        .WithMany()
 //                        .HasForeignKey("UserId")

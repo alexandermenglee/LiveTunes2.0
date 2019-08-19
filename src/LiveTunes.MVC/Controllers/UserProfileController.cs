@@ -7,6 +7,7 @@ using LiveTunes.MVC.Data;
 using LiveTunes.MVC.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LiveTunes.MVC.Controllers
 {
@@ -17,10 +18,30 @@ namespace LiveTunes.MVC.Controllers
         {
             _context = context;
         }
+
+        public IActionResult Profile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+
+            if (userProfile == null)
+            {
+                return RedirectToAction("Create","UserProfile");
+                
+            }
+            else
+            {
+                return RedirectToAction("Index", new { id = userProfile.UserProfileId });
+            }
+        }
+
         // GET: UserProfile
         public ActionResult Index()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+            
+            return View(userProfile);
         }
 
         // GET: UserProfile/Details/5
@@ -32,8 +53,14 @@ namespace LiveTunes.MVC.Controllers
         // GET: UserProfile/Create
         public ActionResult Create()
         {
-            //UserProfile add = new UserProfile();
-            
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var newUserProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+
+            if (newUserProfile != null)
+            {
+                return RedirectToAction("Create", "Survey");
+            }
+
             return View();
         }
 
@@ -42,20 +69,37 @@ namespace LiveTunes.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(UserProfile profile)
         {
-            UserProfile add = new UserProfile();
-            add.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            add.FirstName = profile.FirstName;
-            add.LastName = profile.LastName;
-            _context.UserProfiles.Add(add);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var newUserProfile = new UserProfile();
+                
+            newUserProfile.UserId = userId;
+            newUserProfile.FirstName = profile.FirstName;
+            newUserProfile.LastName = profile.LastName;
+
+            _context.UserProfiles.Add(newUserProfile);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Create", "Survey"); 
         }
 
         // GET: UserProfile/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserProfileId == id && x.UserId == userId);
+
+            if (userProfile == null)
+            {
+                return NotFound();
+            }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userProfile.UserId);
+            
+            return View(userProfile);
         }
 
         // POST: UserProfile/Edit/5
@@ -83,6 +127,5 @@ namespace LiveTunes.MVC.Controllers
         }
 
         // POST: UserProfile/Delete/5
-        
     }
 }

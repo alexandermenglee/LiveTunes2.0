@@ -48,10 +48,13 @@ namespace LiveTunes.MVC.Controllers
             preference.SongName = songName;
             preference.ArtistName = artist;
             preference.Genre = genre;
+
             var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _context.UserProfiles.Where(x => x.UserId == userid).FirstOrDefaultAsync();
+
             preference.UserId = user.UserProfileId;
             preference.User = user;
+            
             await _context.MusicPreferences.AddAsync(preference);
             await _context.SaveChangesAsync();
         }
@@ -65,13 +68,18 @@ namespace LiveTunes.MVC.Controllers
             return musicPreferenceData.ToList();
         }
 
+        public ActionResult SongSamples()
+        {
+            return View();
+        }
 
         //Will write Some Jquery to go along with this
         //Pretty Much adding the song liked to MusicPreferences table
         [HttpPost]
-        public void Like(JsonResult Song)
+        public async Task Like([FromBody] MusicPreference likedSong)
         {
-            //return RedirectToAction(nameof(Index));
+            await _context.MusicPreferences.AddAsync(likedSong);
+            await _context.SaveChangesAsync();
         }
 
         // GET: MusicPreference/Details/5

@@ -17,6 +17,7 @@ namespace LiveTunes.MVC.Controllers
     {
         private ApplicationDbContext _context;
         private HttpClient client;
+
         //private JToken suggestedSongs;
         public SurveyController(ApplicationDbContext context)
         {
@@ -27,15 +28,25 @@ namespace LiveTunes.MVC.Controllers
         // GET: Survey
         public ActionResult Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+            var surveyList = _context.Surveys.Where(x => x.UserId == userProfile.UserProfileId).ToList();
             
-            //string find = User.Identity.UserId;
-            //UserProfile employee = _context.UserProfiles.Where(x => x.UserId == find).FirstOrDefault();
-            return View("Create");
+            return View(surveyList);
         }
         
         // GET: Survey/Create
         public ActionResult Create()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+            var newsurvey = _context.Surveys.FirstOrDefault(x => x.UserId == userProfile.UserProfileId);
+
+            if (newsurvey != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -44,19 +55,20 @@ namespace LiveTunes.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Survey survey)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+            var newSurvey = new Survey();
 
-            Survey add = new Survey();
-            add.ArtistName = survey.ArtistName;
-            add.FavoriteGenre1 = survey.FavoriteGenre1;
-            add.FavoriteGenre2 = survey.FavoriteGenre2;
-            add.FavoriteGenre3 = survey.FavoriteGenre3;
-            var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _context.UserProfiles.Where(x => x.UserId == userid).FirstOrDefault();
-            add.UserId = user.UserProfileId;
+            newSurvey.ArtistName = survey.ArtistName;
+            newSurvey.FavoriteGenre1 = survey.FavoriteGenre1;
+            newSurvey.FavoriteGenre2 = survey.FavoriteGenre2;
+            newSurvey.FavoriteGenre3 = survey.FavoriteGenre3;
+            newSurvey.UserId = userProfile.UserProfileId;
 
-            await _context.AddAsync(add);
+            await _context.AddAsync(newSurvey);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+
+            return RedirectToAction("Index", "Event");
         }
     }
 }

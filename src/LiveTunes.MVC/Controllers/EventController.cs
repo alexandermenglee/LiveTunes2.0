@@ -29,50 +29,47 @@ namespace LiveTunes.MVC.Controllers
         {
             client = new HttpClient();
             _context = context;
+        }
 
-
-			//if (context.Events.Count() <= 1)
-			//{
-			//	context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.10921740000003, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
-			//	context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.0451041, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
-			//}
-			//context.SaveChangesAsync();
-		}
-
-        
 
         private double getDistance(Coordinates g1, Coordinates g2)
         {
-           
             return g1.DistanceTo(g2);
         }
 
         public async Task<List<Event>> getEventsByDistance(Coordinate coordinate, double d)
         {
             var sCoord = new Coordinates(double.Parse(coordinate.Latitude), double.Parse(coordinate.Longitude));
+
             return await _context.Events.Where(x => getDistance(sCoord, new Coordinates(x.Latitude, x.Longitude)) < d).ToListAsync();
         }
 
         public async Task<List<Event>> getEventsByGenre(Coordinate coordinate, int? musicCategoryId)
         {
-            var events = await getEventsByDistance(coordinate, 30);
+            var events = await getEventsByDistance(coordinate, 20);
 
-            return events.Where(x=>x.Genre == musicCategoryId).ToList();
+            return events.Where(x => x.Genre == musicCategoryId).ToList();
         }
 
         [HttpPost]
         public async Task<List<Event>> GetEventsByCoordinates(Coordinate coordinate)
         {
             List<Event> returnEvents = new List<Event>();
+
             try
             {
-                var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=50km&token={EventbriteAPIToken.Token}");
+                var result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=5km&token={EventbriteAPIToken.Token}");
                 var data = JsonConvert.DeserializeObject<JObject>(result);
                 int ObjectCount = (int)data["pagination"]["object_count"];
+                
+                if(ObjectCount > 250)
+                {
+                    ObjectCount = 250;
+                }
 
                 for (int j = 1; j <= (double)ObjectCount / 50; j++)
                 {
-                    result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=50km&token={EventbriteAPIToken.Token}&page={j}");
+                    result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=5km&token={EventbriteAPIToken.Token}&page={j}");
 
                     data = JsonConvert.DeserializeObject<JObject>(result);
 
@@ -83,6 +80,7 @@ namespace LiveTunes.MVC.Controllers
                     EVENTS = data["events"].Where(e => (string)e["category_id"] == "103").ToList();
 
                     Event add = new Event();
+
                     for (int i = 0; i < EVENTS.Count; i++)
                     {
                         var eventFromDB = _context.Events.Where(e => e.EventbriteEventId.Equals((string)EVENTS[i]["id"])).FirstOrDefault();
@@ -102,6 +100,7 @@ namespace LiveTunes.MVC.Controllers
                         newEvent.EventbriteEventId = (string)EVENTS[i]["id"];
                         newEvent.Description = (string)EVENTS[i]["description"]["text"];
                         newEvent.DateTime = (DateTime)EVENTS[i]["start"]["local"];
+                        newEvent.ImageUrl = (string)EVENTS[i]["logo"]["url"];
 
                         returnEvents.Add(newEvent);
 
@@ -113,14 +112,12 @@ namespace LiveTunes.MVC.Controllers
                         {
                             newEvent.Genre = int.Parse((string)EVENTS[i]["subcategory_id"]);
                         }
-
                         await _context.Events.AddAsync(newEvent);
                     }
                 }
-
                 await _context.SaveChangesAsync();
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return null;
             }
@@ -128,20 +125,19 @@ namespace LiveTunes.MVC.Controllers
             return returnEvents;
         }
 
-
         [HttpPost]
         public async Task<List<Event>> Handoff([FromBody] Coordinate coordinate)
-
         {
-          //return await GetEventsByCoordinates(coordinate);
-            return await getEventsByDistance(coordinate, 30);
+            return await GetEventsByCoordinates(coordinate);
+            //return await getEventsByDistance(coordinate, 30);
         }
 
         [HttpPost]
-        public async Task<List<Event>> EventByGenreHandoff( [FromBody] Coordinate coordinate,[FromQuery] int? genreId)
+        public async Task<List<Event>> EventByGenreHandoff([FromBody] Coordinate coordinate, [FromQuery] int? genreId)
         {
             return await getEventsByGenre(coordinate, genreId);
         }
+
 
         public IActionResult Index()
         {
@@ -159,7 +155,6 @@ namespace LiveTunes.MVC.Controllers
 
             ViewBag.UserFirstName = userProfile.FirstName;
             ViewBag.UserLastName = userProfile.LastName;
-
 
             evnt.LikeCount = await _context.Likes.CountAsync(x => x.EventId == id);
             evnt.CommentCount = await _context.Comments.CountAsync(x => x.EventId == id);
@@ -183,11 +178,11 @@ namespace LiveTunes.MVC.Controllers
         }
 
 
-        public async Task List(int GenreId, Coordinate location)
-        {
-            // api call to get List of events by genre and location
-            return;
-        }
+        // public async Task List(int GenreId, Coordinate location)
+        // {
+        //     // api call to get List of events by genre and location
+        //     return;
+        // }
 
         [HttpPost]
         public async Task<IActionResult> Like(int id)
@@ -200,6 +195,7 @@ namespace LiveTunes.MVC.Controllers
             var userProfileId = userProfile.UserProfileId;
 
             var like = await _context.Likes.FirstOrDefaultAsync(x => x.UserId == userProfileId && x.EventId == id);
+
             if (like != null)
             {
                 _context.Likes.Remove(like);
@@ -231,8 +227,8 @@ namespace LiveTunes.MVC.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
             var userProfileId = userProfile.UserProfileId;
-
             var newComment = new Comment();
+            
             newComment.DateTime = DateTime.Now;
             newComment.UserId = userProfileId;
             newComment.EventId = evnt.EventId;

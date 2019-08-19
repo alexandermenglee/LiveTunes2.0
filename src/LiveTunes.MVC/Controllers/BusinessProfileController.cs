@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LiveTunes.MVC.Data;
 using LiveTunes.MVC.Models;
+using LiveTunes.MVC.ViewModels;
+using Newtonsoft.Json;
 
 namespace LiveTunes.MVC.Controllers
 {
@@ -23,6 +25,7 @@ namespace LiveTunes.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.BusinessProfiles.Include(b => b.User);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,6 +40,7 @@ namespace LiveTunes.MVC.Controllers
             var businessProfile = await _context.BusinessProfiles
                 .Include(b => b.User)
                 .FirstOrDefaultAsync(m => m.BusinessProfileId == id);
+
             if (businessProfile == null)
             {
                 return NotFound();
@@ -49,6 +53,7 @@ namespace LiveTunes.MVC.Controllers
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+
             return View();
         }
 
@@ -66,6 +71,7 @@ namespace LiveTunes.MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", businessProfile.UserId);
+
             return View(businessProfile);
         }
 
@@ -83,6 +89,7 @@ namespace LiveTunes.MVC.Controllers
                 return NotFound();
             }
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", businessProfile.UserId);
+
             return View(businessProfile);
         }
 
@@ -133,6 +140,7 @@ namespace LiveTunes.MVC.Controllers
             var businessProfile = await _context.BusinessProfiles
                 .Include(b => b.User)
                 .FirstOrDefaultAsync(m => m.BusinessProfileId == id);
+
             if (businessProfile == null)
             {
                 return NotFound();
@@ -149,6 +157,7 @@ namespace LiveTunes.MVC.Controllers
             var businessProfile = await _context.BusinessProfiles.FindAsync(id);
             _context.BusinessProfiles.Remove(businessProfile);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -160,5 +169,49 @@ namespace LiveTunes.MVC.Controllers
 		//**********************************************************
 		//D3 Graph method
 
-    }
+		public IActionResult BarGraph(int venueId)
+		{
+			return View();
+		}
+
+		//public string CreateGraph(int id)
+		//{
+		//	List<EventUserEngagement> aggregateEventWithHitsList = new List<EventUserEngagement>();
+
+		//	var foundEvents = _context.Events.Where(e => Convert.ToInt32(e.VenueId) == id).ToList();
+		//	foreach (var item in foundEvents)
+		//	{
+		//		EventUserEngagement eventsWithHits = new EventUserEngagement();
+		//		var totalUserEngagement = 0;
+		//		totalUserEngagement = item.LikeCount + item.CommentCount;
+		//		eventsWithHits.EventName = item.EventName;
+		//		eventsWithHits.EventDate = item.DateTime;
+		//		eventsWithHits.UserEngagement = totalUserEngagement;
+		//		aggregateEventWithHitsList.Add(eventsWithHits);
+		//	}
+		//	return JsonConvert.SerializeObject(aggregateEventWithHitsList);
+		//}
+
+		public string CreateGraph(int id)
+		{
+			List<EventUserEngagement> aggregateEventWithHitsList = new List<EventUserEngagement>();
+
+			var foundEvents = _context.Events.Where(e => Convert.ToInt32(e.VenueId) == id).ToList();
+			foreach (var item in foundEvents)
+			{
+				EventUserEngagement eventsWithHits = new EventUserEngagement();
+				var totalLikes = _context.Likes.Where(e => e.EventId == item.EventId).Count();
+				var totalComments = _context.Comments.Where(e => e.EventId == item.EventId).Count();
+				var totalUserEngagement = 0;
+
+				totalUserEngagement = totalLikes + totalComments;
+				eventsWithHits.EventName = item.EventName;
+				eventsWithHits.EventDate = item.DateTime;
+				eventsWithHits.UserEngagement = totalUserEngagement;
+				aggregateEventWithHitsList.Add(eventsWithHits);
+			}
+
+			return JsonConvert.SerializeObject(aggregateEventWithHitsList);
+		}
+	}
 }

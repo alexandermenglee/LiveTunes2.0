@@ -24,6 +24,7 @@ namespace LiveTunes.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Likes.Include(l => l.Event).Include(l => l.UserProfile);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -42,7 +43,6 @@ namespace LiveTunes.MVC.Controllers
             return View();
         }*/
 
-
         [HttpGet, ActionName("dolike")]
         public async Task Create(int id)
         {
@@ -52,6 +52,7 @@ namespace LiveTunes.MVC.Controllers
                 await Delete(id);
                 return;
             }
+
             Like likeObject = new Like();
             likeObject.EventId = id;
             likeObject.Event = likedEvent;
@@ -65,7 +66,6 @@ namespace LiveTunes.MVC.Controllers
             {
                 _context.Likes.Add(likeObject);
                 await _context.SaveChangesAsync();
-
             }
         }
 
@@ -74,6 +74,7 @@ namespace LiveTunes.MVC.Controllers
             var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfileId = _context.UserProfiles.Where(x => x.UserId == userid).FirstOrDefault().UserProfileId;
             var removeLike = await _context.Likes.Where(x => x.UserId == userProfileId && x.EventId == id).FirstOrDefaultAsync();
+
             _context.Likes.Remove(removeLike);
             await _context.SaveChangesAsync();
         }
@@ -87,19 +88,20 @@ namespace LiveTunes.MVC.Controllers
             }
 
             var like = await _context.Likes.FindAsync(id);
+
             if (like == null)
             {
                 return NotFound();
             }
             ViewData["EventId"] = new SelectList(_context.Events, "EventId", "EventId", like.EventId);
             ViewData["UserId"] = new SelectList(_context.UserProfiles, "UserProfileId", "UserProfileId", like.UserId);
+
             return View(like);
         }
 
         // POST: Like/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
 
         // POST: Like/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -109,6 +111,7 @@ namespace LiveTunes.MVC.Controllers
             var like = await _context.Likes.FindAsync(id);
             _context.Likes.Remove(like);
             await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 

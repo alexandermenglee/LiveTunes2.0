@@ -336,9 +336,9 @@
 //                    SurverId = table.Column<int>(nullable: false)
 //                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
 //                    ArtistName = table.Column<string>(nullable: true),
-//                    FavoriteGenre1 = table.Column<string>(nullable: true),
-//                    FavoriteGenre2 = table.Column<string>(nullable: true),
-//                    FavoriteGenre3 = table.Column<string>(nullable: true),
+//                    FavoriteGenre1 = table.Column<int>(nullable: false),
+//                    FavoriteGenre2 = table.Column<int>(nullable: false),
+//                    FavoriteGenre3 = table.Column<int>(nullable: false),
 //                    UserId = table.Column<int>(nullable: false)
 //                },
 //                constraints: table =>
