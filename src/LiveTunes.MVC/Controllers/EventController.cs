@@ -67,7 +67,7 @@ namespace LiveTunes.MVC.Controllers
                     ObjectCount = 250;
                 }
 
-                for (int j = 1; j <= (double)ObjectCount / 50; j++)
+                for (int j = 1; j < (double)ObjectCount / 50; j++)
                 {
                     result = await client.GetStringAsync($"https://www.eventbriteapi.com/v3/events/search?location.longitude={coordinate.Longitude}&location.latitude={coordinate.Latitude}&expand=venue&location.within=5km&token={EventbriteAPIToken.Token}&page={j}");
 
