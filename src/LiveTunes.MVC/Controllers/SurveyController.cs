@@ -56,7 +56,7 @@ namespace LiveTunes.MVC.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
-            var newSurvey = _context.Surveys.FirstOrDefault(x => x.UserId == userProfile.UserProfileId);
+            var newSurvey = new Survey();
 
             newSurvey.ArtistName = survey.ArtistName;
             newSurvey.FavoriteGenre1 = survey.FavoriteGenre1;
