@@ -49,10 +49,13 @@ namespace LiveTunes.MVC.Controllers
             preference.SongName = songName;
             preference.ArtistName = artist;
             preference.Genre = genre;
+
             var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _context.UserProfiles.Where(x => x.UserId == userid).FirstOrDefaultAsync();
+
             preference.UserId = user.UserProfileId;
             preference.User = user;
+            
             await _context.MusicPreferences.AddAsync(preference);
             await _context.SaveChangesAsync();
         }

@@ -24,6 +24,7 @@ namespace LiveTunes.MVC.Controllers
         public async Task<IActionResult> Index(int eventId)
         {
             var applicationDbContext = _context.Comments.Include(c => c.Event).Include(c => c.UserProfile);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -39,6 +40,7 @@ namespace LiveTunes.MVC.Controllers
                 .Include(c => c.Event)
                 .Include(c => c.UserProfile)
                 .FirstOrDefaultAsync(m => m.CommentId == id);
+
             if (comment == null)
             {
                 return NotFound();
@@ -78,7 +80,7 @@ namespace LiveTunes.MVC.Controllers
         }*/
 
         [HttpGet]
-        public async Task Create( int EventId, string text )
+        public async Task Create(int EventId, string text)
         {
             var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfileId = _context.UserProfiles.Where(x => x.UserId == userid).FirstOrDefault().UserProfileId;
@@ -95,6 +97,7 @@ namespace LiveTunes.MVC.Controllers
         public async Task<List<Comment>> List( int id )
         {
             var comments = _context.Comments.Where(x => x.EventId == id);
+
             return await comments.ToListAsync();
         }
 
@@ -107,12 +110,14 @@ namespace LiveTunes.MVC.Controllers
             }
 
             var comment = await _context.Comments.FindAsync(id);
+
             if (comment == null)
             {
                 return NotFound();
             }
             ViewData["EventId"] = new SelectList(_context.Events, "EventId", "EventId", comment.EventId);
             ViewData["UserId"] = new SelectList(_context.UserProfiles, "UserProfileId", "UserProfileId", comment.UserId);
+
             return View(comment);
         }
 
@@ -146,10 +151,12 @@ namespace LiveTunes.MVC.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EventId"] = new SelectList(_context.Events, "EventId", "EventId", comment.EventId);
             ViewData["UserId"] = new SelectList(_context.UserProfiles, "UserProfileId", "UserProfileId", comment.UserId);
+
             return View(comment);
         }
 
@@ -165,6 +172,7 @@ namespace LiveTunes.MVC.Controllers
                 .Include(c => c.Event)
                 .Include(c => c.UserProfile)
                 .FirstOrDefaultAsync(m => m.CommentId == id);
+
             if (comment == null)
             {
                 return NotFound();
@@ -181,6 +189,7 @@ namespace LiveTunes.MVC.Controllers
             var comment = await _context.Comments.FindAsync(id);
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
