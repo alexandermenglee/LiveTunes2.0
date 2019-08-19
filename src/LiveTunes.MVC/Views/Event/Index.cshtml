@@ -52,22 +52,24 @@
 				eventList.innerHTML = "";
 				for (let i = 0; i < recData.length; i++) {
 					console.log(recData[i]);
-					eventList.innerHTML += '<div class="card">\
+					eventList.innerHTML += '<div class="card" style="padding-bottom: 0px; margin-bottom: 3px;">\
 								<div class="card-header  text-center">\
 									' + recData[i].eventName + '\
 								</div>\
 								<div class="card-body container">\
-									<div class="row">\
-										<div class="col-3">\
-											<img />\
+									<div class="row" style="padding-bottom: 0px;">\
+										<div class="col-6">\
+											<img class="col-12" src="' + recData[i].imageUrl + '"/>\
 										</div>\
-										<div class="col-9">\
+										<div class="col-6">\
 											<h5 class="card-title">Name: ' + recData[i].eventName + ' </h5>\
 											<h5 class="card-title">Date: ' + recData[i].dateTime.slice(0, 10) + ' </h5>\
 											<h5 class="card-title">Time: ' + recData[i].dateTime.slice(11, 16) + ' </h5>\
 											<h5 class="card-title">Genre: ' + getGenre(recData[i].genre) + ' </h5>\
 										</div>\
-										<a href="/event/details/'+ recData[i].eventId + '"><button type="submit" class="btn btn-outline-secondary">Details</button></a>\
+										<div class="form-group" style="width: auto; margin: auto; padding: 0px;">\
+											<a href="/event/details/'+ recData[i].eventId + '"><input type="submit" value="Details" class="btn btn-secondary" />\
+										</div>\
 									</div>\
 								</div>\
 							</div>';
