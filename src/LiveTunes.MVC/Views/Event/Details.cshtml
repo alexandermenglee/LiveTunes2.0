@@ -24,10 +24,10 @@
 			</div>
 			<div class="col-6">
 				<h5 class="card-title">Name: @Model.EventName</h5>
+				<h5 class="card-title">Venue: @Model.Venue</h5>
 				<h5 class="card-title">Date: @Model.DateTime.ToString("dd.MM.yyyy")</h5>
 				<h5 class="card-title">Time: @Model.DateTime.ToString("HH:mm")</h5>
 				<h5 class="card-title">Genre: <span id="genre"></span></h5>
-				<h5 class="card-title">Description @Model.Description</h5>
 			</div>
 			<style>
 
@@ -47,6 +47,11 @@
 			</style>
 			<div id="eventMap" class="col-3">
 
+			</div>
+		</div>
+		<div class="card-body container">
+			<div class="col-12">
+				<p class="card-title"> Description: @Model.Description</p>
 			</div>
 		</div>
 	</div>
