@@ -29,22 +29,16 @@ namespace LiveTunes.MVC.Controllers
             return View();
         }
 
-        // GET: UserProfile/Create
-        public ActionResult Create()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var newUserProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
+		// GET: UserProfile/Create
+		public ActionResult Create()
+		{
+			//UserProfile add = new UserProfile();
 
-            if (newUserProfile == null)
-            {
-                return RedirectToAction("Create", "UserProfile");
-            }
+			return View();
+		}
 
-            return RedirectToAction("Create", "Survey");
-        }
-
-        // POST: UserProfile/Create
-        [HttpPost]
+		// POST: UserProfile/Create
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(UserProfile profile)
         {
