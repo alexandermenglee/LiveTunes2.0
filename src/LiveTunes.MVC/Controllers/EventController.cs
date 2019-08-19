@@ -111,7 +111,7 @@ namespace LiveTunes.MVC.Controllers
                 }
                 await _context.SaveChangesAsync();
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return null;
             }
@@ -171,11 +171,11 @@ namespace LiveTunes.MVC.Controllers
         }
 
 
-        public async Task List(int GenreId, Coordinate location)
-        {
-            // api call to get List of events by genre and location
-            return;
-        }
+        // public async Task List(int GenreId, Coordinate location)
+        // {
+        //     // api call to get List of events by genre and location
+        //     return;
+        // }
 
         [HttpPost]
         public async Task<IActionResult> Like(int id)

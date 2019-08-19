@@ -76,7 +76,7 @@ namespace LiveTunes.MVC.Controllers
                     return View();
                 }
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 return View();
             }
