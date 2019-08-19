@@ -7,8 +7,8 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>var coords = {};</script>
 
-<select class="genres"></select>
-<input type="button" id="genresClick" value="Enter" />
+<select class="genres form-control" style="width: 200px;"></select>
+<button class="btn btn-sm btn-outline-primary" id="genresClick" style="margin-top: 5px; margin-bottom: 5px;">Search</button>
 
 <style>
 	#eventList {
@@ -53,7 +53,7 @@
 				for (let i = 0; i < recData.length; i++) {
 					console.log(recData[i]);
 					eventList.innerHTML += '<div class="card">\
-								<div class="card-header">\
+								<div class="card-header  text-center">\
 									' + recData[i].eventName + '\
 								</div>\
 								<div class="card-body container">\
@@ -62,12 +62,12 @@
 											<img />\
 										</div>\
 										<div class="col-9">\
-											<h5 class="card-title">Name: </h5>\
-											<h5 class="card-title">Date:' + recData[i].dateTime + ' </h5>\
-											<h5 class="card-title">Time: </h5>\
-											<h5 class="card-title">Genre:' + getGenre(recData[i].genre) + ' </h5>\
+											<h5 class="card-title">Name: ' + recData[i].eventName + ' </h5>\
+											<h5 class="card-title">Date: ' + recData[i].dateTime.slice(0, 10) + ' </h5>\
+											<h5 class="card-title">Time: ' + recData[i].dateTime.slice(11, 16) + ' </h5>\
+											<h5 class="card-title">Genre: ' + getGenre(recData[i].genre) + ' </h5>\
 										</div>\
-										<a href="/event/details/'+ recData[i].eventId + '"><input type="button" value="Go"/></a>\
+										<a href="/event/details/'+ recData[i].eventId + '"><button type="submit" class="btn btn-outline-secondary">Details</button></a>\
 									</div>\
 								</div>\
 							</div>';
@@ -92,7 +92,7 @@
 				for (let i = 0; i < recData.length; i++) {
 					console.log(recData[i]);
 					eventList.innerHTML += '<div class="card">\
-								<div class="card-header">\
+								<div class="card-header text-center">\
 									' + recData[i].eventName + '\
 								</div>\
 								<div class="card-body container">\
@@ -101,12 +101,12 @@
 											<img />\
 										</div>\
 										<div class="col-9">\
-											<h5 class="card-title">Name: </h5>\
-											<h5 class="card-title">Date:' + recData[i].dateTime + ' </h5>\
-											<h5 class="card-title">Time: </h5>\
-											<h5 class="card-title">Genre:' + getGenre(recData[i].genre) + ' </h5>\
+											<h5 class="card-title">Name: ' + recData[i].eventName + ' </h5>\
+											<h5 class="card-title">Date: ' + recData[i].dateTime.slice(0, 10) + ' </h5>\
+											<h5 class="card-title">Time: ' + recData[i].dateTime.slice(11, 16) + ' </h5>\
+											<h5 class="card-title">Genre: ' + getGenre(recData[i].genre) + ' </h5>\
 										</div>\
-										<a href="/event/details/'+ recData[i].eventId + '"><input type="button" value="Go"/></a>\
+										<a href="/event/details/'+ recData[i].eventId + '"><button type="submit" class="btn btn-outline-secondary">Details</button></a>\
 									</div>\
 								</div>\
 							</div>';
