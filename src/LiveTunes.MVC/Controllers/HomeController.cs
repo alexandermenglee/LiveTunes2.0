@@ -17,8 +17,8 @@ namespace LiveTunes.MVC.Controllers
         public HomeController(ApplicationDbContext a)
         {
             _context = a;
-            //using (var transaction = a.Database.BeginTransaction())
-            //{
+            // using (var transaction = a.Database.BeginTransaction())
+            // {
             //    a.MusicCategories.Add(new Models.MusicCategory(3001, "Alternative"));
             //    a.MusicCategories.Add(new Models.MusicCategory(3002, "Blues & Jazz"));
             //    a.MusicCategories.Add(new Models.MusicCategory(3003, "Classical"));
