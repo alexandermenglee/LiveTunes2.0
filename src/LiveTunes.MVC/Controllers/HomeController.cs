@@ -16,41 +16,60 @@ namespace LiveTunes.MVC.Controllers
         private ApplicationDbContext _context;
         public HomeController(ApplicationDbContext a)
         {
-   //         _context = a;
+            _context = a;
 
-			//using (var transaction = a.Database.BeginTransaction())
-			//{
-			//	a.MusicCategories.Add(new Models.MusicCategory(3001, "Alternative"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3002, "Blues & Jazz"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3003, "Classical"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3004, "Country"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3005, "Cultural"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3006, "EDM / Electronic"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3007, "Folk"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3008, "Hip Hop / Rap"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3009, "Indie"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3010, "Latin"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3011, "Metal"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3012, "Opera"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3013, "Pop"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3014, "R&B"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3015, "Reggae"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3016, "Religious/Spirtual"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3017, "Rock"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3018, "Top 40"));
-			//	a.MusicCategories.Add(new Models.MusicCategory(3019, "Other"));
+			// using (var transaction = a.Database.BeginTransaction())
+			// {
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3001, "Alternative"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3002, "Blues & Jazz"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3003, "Classical"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3004, "Country"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3005, "Cultural"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3006, "EDM / Electronic"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3007, "Folk"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3008, "Hip Hop / Rap"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3009, "Indie"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3010, "Latin"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3011, "Metal"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3012, "Opera"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3013, "Pop"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3014, "R&B"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3015, "Reggae"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3016, "Religious/Spirtual"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3017, "Rock"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3018, "Top 40"));
+			// 	a.MusicCategories.Add(new Models.MusicCategory(3019, "Other"));
 
-			//	a.Database.ExecuteSqlCommand("SET IDENTITY_INSERT MusicCategories ON;");
-			//	a.SaveChanges();
-			//	a.Database.ExecuteSqlCommand("SET IDENTITY_INSERT MusicCategories OFF");
-			//	transaction.Commit();
-			//}
-		}
-        public IActionResult Index()
+			// 	a.Database.ExecuteSqlCommand("SET IDENTITY_INSERT MusicCategories ON;");
+			// 	a.SaveChanges();
+			// 	a.Database.ExecuteSqlCommand("SET IDENTITY_INSERT MusicCategories OFF");
+			// 	transaction.Commit();
+			// }
+        }
+        public async Task<IActionResult> Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.Name);
+
+            if (userId == null)
+            {
+                return LocalRedirect("~/Identity/Account/Login");
+            }
+
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
+            var survey = await _context.Surveys.FirstOrDefaultAsync(x => x.UserId == userProfile.UserProfileId);
+            
+            if (userProfile == null)
+            {
+                return RedirectToAction("Create", "UserProfile");
+            }
+
+            if (survey == null)
+            {
+                return RedirectToAction("Create", "Survey");
+            }
+
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(userId == null)
                 {
                     return View();
