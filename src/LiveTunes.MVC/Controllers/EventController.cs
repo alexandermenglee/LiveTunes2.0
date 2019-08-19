@@ -29,13 +29,19 @@ namespace LiveTunes.MVC.Controllers
         {
             client = new HttpClient();
             _context = context;
-		}
 
-        
+            //if (context.Events.Count() <= 1)
+            //{
+            //	context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.10921740000003, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
+            //	context.Events.Add(new Event { Latitude = 49.2746619, Longitude = -123.0451041, EventName = "King Gizzard and the Lizard Wizard", DateTime = DateTime.Now, Genre = "Post Punk" });
+            //}
+            //context.SaveChangesAsync();
+        }
+
 
         private double getDistance(Coordinates g1, Coordinates g2)
         {
-           
+
             return g1.DistanceTo(g2);
         }
 
@@ -49,7 +55,7 @@ namespace LiveTunes.MVC.Controllers
         {
             var events = await getEventsByDistance(coordinate, 30);
 
-            return events.Where(x=>x.Genre == musicCategoryId).ToList();
+            return events.Where(x => x.Genre == musicCategoryId).ToList();
         }
 
         [HttpPost]
@@ -125,12 +131,12 @@ namespace LiveTunes.MVC.Controllers
         public async Task<List<Event>> Handoff([FromBody] Coordinate coordinate)
 
         {
-          //return await GetEventsByCoordinates(coordinate);
+            //return await GetEventsByCoordinates(coordinate);
             return await getEventsByDistance(coordinate, 30);
         }
 
         [HttpPost]
-        public async Task<List<Event>> EventByGenreHandoff( [FromBody] Coordinate coordinate,[FromQuery] int? genreId)
+        public async Task<List<Event>> EventByGenreHandoff([FromBody] Coordinate coordinate, [FromQuery] int? genreId)
         {
             return await getEventsByGenre(coordinate, genreId);
         }
