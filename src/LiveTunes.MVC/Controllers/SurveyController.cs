@@ -41,12 +41,12 @@ namespace LiveTunes.MVC.Controllers
             var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
             var newsurvey = _context.Surveys.FirstOrDefault(x => x.UserId == userProfile.UserProfileId);
 
-            if (newsurvey == null)
+            if (newsurvey != null)
             {
-                return RedirectToAction("Create", "Survey");
+                return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index", "Event");
+            return View();
         }
 
         // POST: Survey/Create
@@ -56,7 +56,7 @@ namespace LiveTunes.MVC.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfile = _context.UserProfiles.FirstOrDefault(x => x.UserId == userId);
-            var newSurvey = _context.Surveys.FirstOrDefault(x => x.UserId == userProfile.UserProfileId);
+            var newSurvey = new Survey();
 
             newSurvey.ArtistName = survey.ArtistName;
             newSurvey.FavoriteGenre1 = survey.FavoriteGenre1;
