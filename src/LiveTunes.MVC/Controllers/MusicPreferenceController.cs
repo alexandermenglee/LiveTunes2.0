@@ -92,7 +92,10 @@ namespace LiveTunes.MVC.Controllers
 
         public ActionResult SongSamples()
         {
-            return View();
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userProfileId = _context.UserProfiles.Where(x => x.UserId == userId).FirstOrDefault();
+			var survey = _context.Surveys.Where(s => s.UserId == userProfileId.UserProfileId).Single();
+			return View();
         }
 
         //Will write Some Jquery to go along with this
