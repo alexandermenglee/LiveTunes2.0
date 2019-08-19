@@ -12,7 +12,8 @@ function getSuggestedSong() {
         dataType: "jsonp",
         method: "get",
         url: endpoint,
-        success: data => {
+		success: data => {
+			console.log(data);	
             displayRecommendedSongs(data.results);
         },
         error: error => console.log(error)

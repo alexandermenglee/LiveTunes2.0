@@ -9,6 +9,7 @@ using LiveTunes.MVC.Data;
 using LiveTunes.MVC.Models;
 using LiveTunes.MVC.ViewModels;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace LiveTunes.MVC.Controllers
 {
@@ -25,7 +26,8 @@ namespace LiveTunes.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.BusinessProfiles.Include(b => b.User);
-            return View(await applicationDbContext.ToListAsync());
+			SeedDatabase();
+			return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: BusinessProfile/Details/5
@@ -167,25 +169,6 @@ namespace LiveTunes.MVC.Controllers
 			return View();
 		}
 
-		//public string CreateGraph(int id)
-		//{
-		//	List<EventUserEngagement> aggregateEventWithHitsList = new List<EventUserEngagement>();
-
-		//	var foundEvents = _context.Events.Where(e => Convert.ToInt32(e.VenueId) == id).ToList();
-		//	foreach (var item in foundEvents)
-		//	{
-		//		EventUserEngagement eventsWithHits = new EventUserEngagement();
-		//		var totalUserEngagement = 0;
-		//		totalUserEngagement = item.LikeCount + item.CommentCount;
-		//		eventsWithHits.EventName = item.EventName;
-		//		eventsWithHits.EventDate = item.DateTime;
-		//		eventsWithHits.UserEngagement = totalUserEngagement;
-		//		aggregateEventWithHitsList.Add(eventsWithHits);
-		//	}
-		//	return JsonConvert.SerializeObject(aggregateEventWithHitsList);
-		//}
-
-
 		public string CreateGraph(int id)
 		{
 			List<EventUserEngagement> aggregateEventWithHitsList = new List<EventUserEngagement>();
@@ -204,6 +187,27 @@ namespace LiveTunes.MVC.Controllers
 				aggregateEventWithHitsList.Add(eventsWithHits);
 			}
 			return JsonConvert.SerializeObject(aggregateEventWithHitsList);
+		}
+
+		public void SeedDatabase()
+		{
+			var eventCount = _context.Events.Count();
+			var totalEvents = 5;
+			if (eventCount == 0)
+			{
+				for (int i = 0; i < totalEvents; i++)
+				{
+					Event newEvent = new Event();
+					newEvent.VenueId = 12345678;
+					newEvent.Venue = "Hyatt";
+					newEvent.Latitude = 43.039;
+					newEvent.Longitude = -87.907;
+					newEvent.EventName = $"Event{i}";
+					newEvent.DateTime = DateTime.Now;
+					_context.Events.Add(newEvent);
+					_context.SaveChanges();
+				}
+			}
 		}
 
 	}
